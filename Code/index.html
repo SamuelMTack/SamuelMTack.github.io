@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Samuel Tack</title>
+    <style>
+        :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+        body{margin:0;background:#f7f8fb;color:#0f1724}
+        header{background:#0b3c5d;color:#fff;padding:2rem 1rem;text-align:center}
+        main{max-width:900px;margin:2rem auto;padding:1rem}
+        pre{background:#0f2433;color:#dff3ff;padding:1rem;border-radius:6px;overflow:auto}
+        .card{background:#fff;border-radius:8px;box-shadow:0 6px 18px rgba(11,60,93,0.08);padding:1rem;margin:1rem 0}
+        a.button{display:inline-block;background:#0b3c5d;color:#fff;padding:.5rem .75rem;border-radius:6px;text-decoration:none}
+        footer{font-size:.85rem;color:#55606a;text-align:center;padding:2rem 1rem}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Samuel Tack</h1>
+        <p style="opacity:.9;margin:.25rem 0">Minimal static site — this repo currently contains a single `index.html`.</p>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2>Who I am</h2>
+            <p>I am a IT Professional who works with Servers Networks Software and Hardware while maintaing accurate documentation</p>
+        </section>
+
+        <section class="card">
+            <h2>Images</h2>
+            <p>Two small SVG examples included in <code>assets/</code> — an avatar and a simple network diagram.</p>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+                <figure style="margin:0">
+                    <img src="assets/avatar.svg" alt="avatar" width="160" style="display:block;border-radius:6px;"/>
+                    <figcaption style="font-size:.85rem;color:#55606a;margin-top:.35rem">Avatar (SVG)</figcaption>
+                </figure>
+                <figure style="margin:0">
+                    <img src="assets/network.svg" alt="network diagram" width="320" style="display:block;border-radius:6px;"/>
+                    <figcaption style="font-size:.85rem;color:#55606a;margin-top:.35rem">Network diagram (SVG)</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>How to preview locally</h2>
+            <p>Open <code>index.html</code> in your browser, or run a small local static server from the repo root.</p>
+            <pre><code>npx http-server .
+# or
+python -m http.server 8000</code></pre>
+            <p>Then open <code>http://localhost:8080</code> (or <code>:8000</code> for Python) in your browser.</p>
+        </section>
+
+        <section class="card">
+            <h2>Examples of small edits</h2>
+            <ul>
+                <li>Change the body text in <code>index.html</code>.</li>
+                <li>Add a stylesheet under <code>css/</code> and reference it from the head: <code>&lt;link rel="stylesheet" href="css/styles.css"&gt;</code>.</li>
+                <li>Add images under <code>assets/</code> and reference them with relative URLs.</li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>Notes for contributors</h2>
+            <p>Prefer minimal, focused PRs. If you propose adding a build system or dependencies (e.g., <code>package.json</code>), include a short README that explains why and how to run the build locally.</p>
+        </section>
+
+        <section class="card">
+            <h2>Contact</h2>
+            <p>If you'd like to get in touch you can reveal or copy the email address below. This avoids exposing the raw address in page HTML.</p>
+            <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem;flex-wrap:wrap">
+                <button id="revealEmail" class="button">Show contact</button>
+                <button id="copyEmail" class="button" disabled>Copy email</button>
+                <span id="emailDisplay" style="font-family:monospace;color:#0b3c5d;margin-left:.5rem"></span>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Quick file reference</h2>
+            <ul>
+                <li><code>index.html</code> — single-page app / site entry.</li>
+                <li><code>.github/copilot-instructions.md</code> — guidance for AI agents and contributors.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <div>Made for a minimal static demo • Edit <code>index.html</code> to get started</div>
+    </footer>
+        <script>
+            // Build the address in JS so it's not plainly visible in HTML
+            (function(){
+                const user = 'samuelmtack';
+                const domain = 'gmail.com';
+                const email = user + '@' + domain;
+
+                const revealBtn = document.getElementById('revealEmail');
+                const copyBtn = document.getElementById('copyEmail');
+                const display = document.getElementById('emailDisplay');
+
+                revealBtn.addEventListener('click', function(){
+                    display.textContent = email;
+                    copyBtn.disabled = false;
+                    revealBtn.textContent = 'Reveal again';
+                });
+
+                copyBtn.addEventListener('click', function(){
+                    navigator.clipboard && navigator.clipboard.writeText
+                        ? navigator.clipboard.writeText(email).then(()=>{
+                                copyBtn.textContent = 'Copied!';
+                                setTimeout(()=>copyBtn.textContent = 'Copy email',1500);
+                            })
+                        : (function(){
+                                const ta = document.createElement('textarea');
+                                ta.value = email; document.body.appendChild(ta); ta.select();
+                                try{document.execCommand('copy'); copyBtn.textContent='Copied!'; setTimeout(()=>copyBtn.textContent='Copy email',1500);}catch(e){}
+                                document.body.removeChild(ta);
+                            })();
+                });
+            })();
+        </script>
+</body>
+</html>
