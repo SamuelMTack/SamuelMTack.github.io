@@ -18,7 +18,7 @@
 <body>
     <header>
         <h1>Samuel Tack</h1>
-        <p style="opacity:.9;margin:.25rem 0">Minimal static site — this repo currently contains a single `index.html`.</p>
+        <p style="opacity:.9;margin:.25rem 0">An IT Profesional.</p>
     </header>
 
     <main>
@@ -27,43 +27,66 @@
             <p>I am a IT Professional who works with Servers Networks Software and Hardware while maintaing accurate documentation</p>
         </section>
 
-        <section class="card">
-            <h2>Images</h2>
-            <p>Two small SVG examples included in <code>assets/</code> — an avatar and a simple network diagram.</p>
-            <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
-                <figure style="margin:0">
-                    <img src="assets/avatar.svg" alt="avatar" width="160" style="display:block;border-radius:6px;"/>
-                    <figcaption style="font-size:.85rem;color:#55606a;margin-top:.35rem">Avatar (SVG)</figcaption>
-                </figure>
-                <figure style="margin:0">
-                    <img src="assets/network.svg" alt="network diagram" width="320" style="display:block;border-radius:6px;"/>
-                    <figcaption style="font-size:.85rem;color:#55606a;margin-top:.35rem">Network diagram (SVG)</figcaption>
-                </figure>
-            </div>
+        <section id="hobbies" class="card">
+            <h2>Hobbies</h2>
+            <p>Outside of work Samuel enjoys a range of hands-on and social hobbies that blend strategy, creativity, and teamwork.</p>
+
+            <h3>League of Legends</h3>
+            <p>Samuel plays League of Legends regularly — focusing on strategic play, champion mastery, and team communication. He enjoys climbing solo queue when time allows but prefers organized flex games with friends. His approach emphasizes map awareness, objective control (dragon/baron), and effective shot-calling during mid-to-late game teamfights. He also experiments with champion builds and studies patch notes to adapt to meta shifts.</p>
+
+            <h3>Paintball</h3>
+            <p>Paintball offers a physical, adrenaline-filled counterpart to Samuel's gaming hobby. He enjoys both timed scenario matches and capture-the-flag style play. Key interests include field tactics, communication with teammates, and equipment upkeep (marker maintenance, protective gear). Paintball days are typically planned with a small group — striking a balance between competitiveness and social fun.</p>
+
+            <h3>3D Printing & Design</h3>
+            <p>Samuel designs and 3D prints practical projects and creative models. He works through the full pipeline: concept, CAD modeling (parametric modeling for repeatability), slicing, and printer tuning. Common projects include custom mounts, replacement parts, miniatures, and functional prototypes. He's comfortable troubleshooting print issues (bed adhesion, extrusion, layer shifts) and iterating on designs to improve fit and strength.</p>
+
+            <h3>Dungeons & Dragons</h3>
+            <p>Dungeons & Dragons is a regular hobby where Samuel alternates between player and Dungeon Master roles. He values the storytelling, collaborative problem solving, and roleplaying depth the game offers. As DM he prepares adventures, crafts NPCs, and creates maps; as a player he focuses on character development and meaningful in-game choices. Campaigns often span many sessions and are a core social activity among friends.</p>
+        </section>
         </section>
 
-        <section class="card">
-            <h2>How to preview locally</h2>
-            <p>Open <code>index.html</code> in your browser, or run a small local static server from the repo root.</p>
-            <pre><code>npx http-server .
-# or
-python -m http.server 8000</code></pre>
-            <p>Then open <code>http://localhost:8080</code> (or <code>:8000</code> for Python) in your browser.</p>
-        </section>
+        <section id="career" class="card">
+            <h2>Career</h2>
 
-        <section class="card">
-            <h2>Examples of small edits</h2>
+            <h3>Nestle — Contract Tier 2 IT Support <small>Mar 2023 – Oct 2023</small></h3>
             <ul>
-                <li>Change the body text in <code>index.html</code>.</li>
-                <li>Add a stylesheet under <code>css/</code> and reference it from the head: <code>&lt;link rel="stylesheet" href="css/styles.css"&gt;</code>.</li>
-                <li>Add images under <code>assets/</code> and reference them with relative URLs.</li>
+                <li>Kept track of an inventory system for hardware and software using Asset ID / Serial #.</li>
+                <li>Worked at the Help desk where users would approach with issues varying from Microsoft Teams errors, Outlook Email issues, and Excel glitches.</li>
+                <li>Used Active Directory to reset passwords, setup user accounts, and manage user group access.</li>
+                <li>Made calls and sent emails to update hardware of users with outdated equipment and contacted vendors for hardware service of broken/malfunctioning equipment.</li>
+            </ul>
+
+            <h3>Mistras Group — Full-time PCMS SaaS System Admin <small>Nov 2021 – Feb 2023</small></h3>
+            <ul>
+                <li>Worked with Microsoft Azure Active Directory — Groups, Users, Enterprise Applications and Virtual Machines.</li>
+                <li>Configured AD user groups, MFA Authentication, and Microsoft Defender for Cloud.</li>
+                <li>Provisioned SaaS installations to newly created Azure Virtual Machines.</li>
+                <li>Assisted management with change control and handled tickets from AxoSoft and SolarWinds.</li>
+                <li>Entered SQL scripts to add users into separate databases and created/restored database backups.</li>
+                <li>Raised, lowered, and decommissioned virtual machine resources within Azure across multiple regions (Europe, Australia, US east/west).</li>
+                <li>Applied security settings for AD, Azure group access, and SQL database access; created Azure alerts for SLA and SOC2 requirements.</li>
+                <li>Built application servers in Azure VMs and integrated them into a SaaS multi-application portal.</li>
+            </ul>
+
+            <h3>KAG — Contract Tier 2 IT Helpdesk Support <small>July 2021 – Sept 2021</small></h3>
+            <ul>
+                <li>Active Directory administration — user account creation, password reset, account unlock and permission placement.</li>
+                <li>Microsoft Azure administration — reset MFA for users and initial MFA setup.</li>
+                <li>Used a PXE server with multiple images to provision PCs for end users.</li>
+                <li>Provided call support for tablets used for driver logs; administered VOIP via 8x8 and performed remote troubleshooting with TeamViewer.</li>
+                <li>Managed transitions: 8x8 to Microsoft Teams, McAfee to Carbon Black, and on-prem AD to cloud-based Azure AD.</li>
+            </ul>
+
+            <h3>Amware Full Service Freight & Logistics — IT Support <small>June 2017 – June 2018</small></h3>
+            <ul>
+                <li>Administered email accounts through Office 365 and assigned static IP addresses to machines.</li>
+                <li>Setup, maintained, and repaired multiple desktops and laptops; administered a pool of Windows Surface devices used with RF guns.</li>
+                <li>Trained office and warehouse co-workers on the tablet recording system and configured/troubleshot Citrix Receiver.</li>
+                <li>Troubleshot LAN connectivity and WAN activity for office workers and remote warehouses.</li>
             </ul>
         </section>
 
-        <section class="card">
-            <h2>Notes for contributors</h2>
-            <p>Prefer minimal, focused PRs. If you propose adding a build system or dependencies (e.g., <code>package.json</code>), include a short README that explains why and how to run the build locally.</p>
-        </section>
+        
 
         <section class="card">
             <h2>Contact</h2>
@@ -75,13 +98,7 @@ python -m http.server 8000</code></pre>
             </div>
         </section>
 
-        <section class="card">
-            <h2>Quick file reference</h2>
-            <ul>
-                <li><code>index.html</code> — single-page app / site entry.</li>
-                <li><code>.github/copilot-instructions.md</code> — guidance for AI agents and contributors.</li>
-            </ul>
-        </section>
+        
     </main>
 
     <footer>
