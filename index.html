@@ -4,21 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Samuel Tack</title>
-    <style>
-        :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
-        body{margin:0;background:#f7f8fb;color:#0f1724}
-        header{background:#0b3c5d;color:#fff;padding:2rem 1rem;text-align:center}
-        main{max-width:900px;margin:2rem auto;padding:1rem}
-        pre{background:#0f2433;color:#dff3ff;padding:1rem;border-radius:6px;overflow:auto}
-        .card{background:#fff;border-radius:8px;box-shadow:0 6px 18px rgba(11,60,93,0.08);padding:1rem;margin:1rem 0}
-        a.button{display:inline-block;background:#0b3c5d;color:#fff;padding:.5rem .75rem;border-radius:6px;text-decoration:none}
-        footer{font-size:.85rem;color:#55606a;text-align:center;padding:2rem 1rem}
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <header>
+    <header class="site-header">
         <h1>Samuel Tack</h1>
-        <p style="opacity:.9;margin:.25rem 0">An IT Profesional.</p>
+        <p class="tagline">An IT Profesional.</p>
     </header>
 
     <main>
@@ -44,44 +35,38 @@
             <p>Dungeons & Dragons is a regular hobby where Samuel alternates between player and Dungeon Master roles. He values the storytelling, collaborative problem solving, and roleplaying depth the game offers. As DM he prepares adventures, crafts NPCs, and creates maps; as a player he focuses on character development and meaningful in-game choices. Campaigns often span many sessions and are a core social activity among friends.</p>
         </section>
 
-        <section id="family" class="card">
+        <section id="family" class="card family-card">
             <h2>Family</h2>
             <p>Samuels Family </p>
 
-            <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start">
+                <div class="media-grid">
                 <!-- Image placeholders -->
-                    <div style="display:flex;gap:1rem;flex-wrap:wrap;flex:2;min-width:220px;align-items:flex-start">
-                    <figure style="margin:0">
-                            <img src="assets/Dad.JPG" alt="Dad" width="320" style="display:block;border-radius:6px;border:1px solid #e6edf3;max-width:100%;height:auto;"/>
-                        <figcaption style="font-size:.85rem;color:#55606a;margin-top:.35rem">David Tack
-                            An advid recrational shooter and engineer
-                        </figcaption>
+                    <div class="photos">
+                    <figure>
+                            <img src="assets/Dad.JPG" alt="Dad" width="320"/>
+                        <figcaption>David Tack — An advid recrational shooter and engineer</figcaption>
                     </figure>
-                    <figure style="margin:0">
-                            <img src="assets/PaulTack.JPG" alt="Paul Tack" width="320" style="display:block;border-radius:6px;border:1px solid #e6edf3;max-width:100%;height:auto;"/>
-                        <figcaption style="font-size:.85rem;color:#55606a;margin-top:.35rem">Paul Tack
-                            A liguist and world traveler who lives in Japan
-                        </figcaption>
+                    <figure>
+                            <img src="assets/PaulTack.JPG" alt="Paul Tack" width="320"/>
+                        <figcaption>Paul Tack — A liguist and world traveler who lives in Japan</figcaption>
                     </figure>
-                    <figure style="margin:0">
-                            <img src="assets/SamWaterfall.jpg" alt="Sam Waterfall" width="320" style="display:block;border-radius:6px;border:1px solid #e6edf3;max-width:100%;height:auto;"/>
-                        <figcaption style="font-size:.85rem;color:#55606a;margin-top:.35rem">Samuel Tack
-                            An IT Profesional who enjoys gaming and 3D printing
-                        </figcaption>
+                    <figure>
+                            <img src="assets/SamWaterfall.jpg" alt="Sam Waterfall" width="320"/>
+                        <figcaption>Samuel Tack — An IT Profesional who enjoys gaming and 3D printing</figcaption>
                     </figure>
-                </div>
+                    </div>
 
-                <!-- Video placeholders -->
-                <div style="flex:1;min-width:260px;display:flex;flex-direction:column;gap:1rem">
-                    <figure style="margin:0">
-                        <video controls style="width:100%;border-radius:6px;border:1px solid #e6edf3;max-width:720px;max-height:720px;height:auto">
-                            <source src="assets/PaulKendo.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                        <figcaption style="font-size:.85rem;color:#55606a;margin-top:.35rem">PaulKendo</figcaption>
-                    </figure>
+                    <!-- Video placeholders -->
+                    <div class="video-col">
+                        <figure style="margin:0">
+                            <video controls>
+                                <source src="assets/PaulKendo.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <figcaption>PaulKendo</figcaption>
+                        </figure>
+                    </div>
                 </div>
-            </div>
     </section>
 
     <section id="career" class="card">
@@ -130,10 +115,10 @@
         <section class="card">
             <h2>Contact</h2>
             <p>If you'd like to get in touch you can reveal or copy the email address below. This avoids exposing the raw address in page HTML.</p>
-            <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem;flex-wrap:wrap">
+            <div class="contact-row">
                 <button id="revealEmail" class="button">Show contact</button>
                 <button id="copyEmail" class="button" disabled>Copy email</button>
-                <span id="emailDisplay" style="font-family:monospace;color:#0b3c5d;margin-left:.5rem"></span>
+                <span id="emailDisplay" class="email-display"></span>
             </div>
         </section>
 
@@ -141,7 +126,7 @@
     </main>
 
     <footer>
-        <div>Made for a minimal static demo • Edit <code>index.html</code> to get started</div>
+        <div>Last Updated 9/22/2025</div>
     </footer>
         <script>
             // Build the address in JS so it's not plainly visible in HTML
