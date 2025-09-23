@@ -4,161 +4,177 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Samuel Tack</title>
+    <!-- Project styles -->
     <link rel="stylesheet" href="css/styles.css">
+    <!-- Dimension theme styles (local) -->
+    <link rel="stylesheet" href="Dimension/DimensionAssets/css/main.css">
+    <noscript><link rel="stylesheet" href="Dimension/DimensionAssets/css/noscript.css" /></noscript>
 </head>
-<body>
-    <header class="site-header">
-        <h1>Samuel Tack</h1>
-        <p class="tagline">An IT Profesional.</p>
-    </header>
+<body class="is-preload">
 
-    <main>
-        <section class="card">
-            <h2>Who I am</h2>
-            <p>I am a IT Professional who works with Servers Networks Software and Hardware while maintaing accurate documentation</p>
-        </section>
+    <!-- Wrapper -->
+    <div id="wrapper">
 
-        <section id="hobbies" class="card">
-            <h2>Hobbies</h2>
-            <p>Outside of work Samuel enjoys a range of hands-on and social hobbies that blend strategy, creativity, and teamwork.</p>
-
-            <h3>League of Legends</h3>
-            <p>Samuel plays League of Legends regularly — focusing on strategic play, champion mastery, and team communication. He enjoys climbing solo queue when time allows but prefers organized flex games with friends. His approach emphasizes map awareness, objective control (dragon/baron), and effective shot-calling during mid-to-late game teamfights. He also experiments with champion builds and studies patch notes to adapt to meta shifts.</p>
-
-            <h3>Paintball</h3>
-            <p>Paintball offers a physical, adrenaline-filled counterpart to Samuel's gaming hobby. He enjoys both timed scenario matches and capture-the-flag style play. Key interests include field tactics, communication with teammates, and equipment upkeep (marker maintenance, protective gear). Paintball days are typically planned with a small group — striking a balance between competitiveness and social fun.</p>
-
-            <h3>3D Printing & Design</h3>
-            <p>Samuel designs and 3D prints practical projects and creative models. He works through the full pipeline: concept, CAD modeling (parametric modeling for repeatability), slicing, and printer tuning. Common projects include custom mounts, replacement parts, miniatures, and functional prototypes. He's comfortable troubleshooting print issues (bed adhesion, extrusion, layer shifts) and iterating on designs to improve fit and strength.</p>
-
-            <h3>Dungeons & Dragons</h3>
-            <p>Dungeons & Dragons is a regular hobby where Samuel alternates between player and Dungeon Master roles. He values the storytelling, collaborative problem solving, and roleplaying depth the game offers. As DM he prepares adventures, crafts NPCs, and creates maps; as a player he focuses on character development and meaningful in-game choices. Campaigns often span many sessions and are a core social activity among friends.</p>
-        </section>
-
-        <section id="family" class="card family-card">
-            <h2>Family</h2>
-            <p>Samuels Family </p>
-
-                <div class="media-grid">
-                <!-- Image placeholders -->
-                    <div class="photos">
-                    <figure>
-                            <img src="assets/Dad.JPG" alt="Dad" width="320"/>
-                        <figcaption>David Tack — An advid recrational shooter and engineer</figcaption>
-                    </figure>
-                    <figure>
-                            <img src="assets/PaulTack.JPG" alt="Paul Tack" width="320"/>
-                        <figcaption>Paul Tack — A liguist and world traveler who lives in Japan</figcaption>
-                    </figure>
-                    <figure>
-                            <img src="assets/SamWaterfall.jpg" alt="Sam Waterfall" width="320"/>
-                        <figcaption>Samuel Tack — An IT Profesional who enjoys gaming and 3D printing</figcaption>
-                    </figure>
-                    </div>
-
-                    <!-- Video placeholders -->
-                    <div class="video-col">
-                        <figure style="margin:0">
-                            <video controls>
-                                <source src="assets/PaulKendo.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                            <figcaption>PaulKendo</figcaption>
-                        </figure>
-                    </div>
-                </div>
-    </section>
-
-    <section id="career" class="card">
-            <h2>Career</h2>
-
-            <h3>Nestle — Contract Tier 2 IT Support <small>Mar 2023 – Oct 2023</small></h3>
-            <ul>
-                <li>Kept track of an inventory system for hardware and software using Asset ID / Serial #.</li>
-                <li>Worked at the Help desk where users would approach with issues varying from Microsoft Teams errors, Outlook Email issues, and Excel glitches.</li>
-                <li>Used Active Directory to reset passwords, setup user accounts, and manage user group access.</li>
-                <li>Made calls and sent emails to update hardware of users with outdated equipment and contacted vendors for hardware service of broken/malfunctioning equipment.</li>
-            </ul>
-
-            <h3>Mistras Group — Full-time PCMS SaaS System Admin <small>Nov 2021 – Feb 2023</small></h3>
-            <ul>
-                <li>Worked with Microsoft Azure Active Directory — Groups, Users, Enterprise Applications and Virtual Machines.</li>
-                <li>Configured AD user groups, MFA Authentication, and Microsoft Defender for Cloud.</li>
-                <li>Provisioned SaaS installations to newly created Azure Virtual Machines.</li>
-                <li>Assisted management with change control and handled tickets from AxoSoft and SolarWinds.</li>
-                <li>Entered SQL scripts to add users into separate databases and created/restored database backups.</li>
-                <li>Raised, lowered, and decommissioned virtual machine resources within Azure across multiple regions (Europe, Australia, US east/west).</li>
-                <li>Applied security settings for AD, Azure group access, and SQL database access; created Azure alerts for SLA and SOC2 requirements.</li>
-                <li>Built application servers in Azure VMs and integrated them into a SaaS multi-application portal.</li>
-            </ul>
-
-            <h3>KAG — Contract Tier 2 IT Helpdesk Support <small>July 2021 – Sept 2021</small></h3>
-            <ul>
-                <li>Active Directory administration — user account creation, password reset, account unlock and permission placement.</li>
-                <li>Microsoft Azure administration — reset MFA for users and initial MFA setup.</li>
-                <li>Used a PXE server with multiple images to provision PCs for end users.</li>
-                <li>Provided call support for tablets used for driver logs; administered VOIP via 8x8 and performed remote troubleshooting with TeamViewer.</li>
-                <li>Managed transitions: 8x8 to Microsoft Teams, McAfee to Carbon Black, and on-prem AD to cloud-based Azure AD.</li>
-            </ul>
-
-            <h3>Amware Full Service Freight & Logistics — IT Support <small>June 2017 – June 2018</small></h3>
-            <ul>
-                <li>Administered email accounts through Office 365 and assigned static IP addresses to machines.</li>
-                <li>Setup, maintained, and repaired multiple desktops and laptops; administered a pool of Windows Surface devices used with RF guns.</li>
-                <li>Trained office and warehouse co-workers on the tablet recording system and configured/troubleshot Citrix Receiver.</li>
-                <li>Troubleshot LAN connectivity and WAN activity for office workers and remote warehouses.</li>
-            </ul>
-        </section>
-
-        
-
-        <section class="card">
-            <h2>Contact</h2>
-            <p>If you'd like to get in touch you can reveal or copy the email address below. This avoids exposing the raw address in page HTML.</p>
-            <div class="contact-row">
-                <button id="revealEmail" class="button">Show contact</button>
-                <button id="copyEmail" class="button" disabled>Copy email</button>
-                <span id="emailDisplay" class="email-display"></span>
+        <!-- Header -->
+        <header id="header">
+            <div class="logo">
+                <span class="icon fa-gem"></span>
             </div>
-        </section>
+            <div class="content">
+                <div class="inner">
+                    <h1>Samuel Tack</h1>
+                    <p class="tagline">An IT Profesional.</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#hobbies">Hobbies</a></li>
+                    <li><a href="#family">Family</a></li>
+                    <li><a href="#career">Career</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Main -->
+        <div id="main">
+
+                <!-- Article: Who I am (Intro) -->
+                <article id="intro">
+                    <h2 class="major">Who I am</h2>
+                    <span class="image main"><img src="assets/SamWaterfall.jpg" alt="Samuel" /></span>
+                    <p>I am an IT Professional who works with servers, networks, software and hardware while maintaining accurate documentation.</p>
+                </article>
+
+                <!-- Article: Hobbies -->
+                <article id="hobbies">
+                    <h2 class="major">Hobbies</h2>
+                    <p>Outside of work Samuel enjoys a range of hands-on and social hobbies that blend strategy, creativity, and teamwork.</p>
+
+                    <section>
+                        <h3 class="major">League of Legends</h3>
+                        <p>Samuel plays League of Legends regularly — focusing on strategic play, champion mastery, and team communication. He enjoys climbing solo queue when time allows but prefers organized flex games with friends. His approach emphasizes map awareness, objective control (dragon/baron), and effective shot-calling during mid-to-late game teamfights. He also experiments with champion builds and studies patch notes to adapt to meta shifts.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="major">Paintball</h3>
+                        <p>Paintball offers a physical, adrenaline-filled counterpart to Samuel's gaming hobby. He enjoys both timed scenario matches and capture-the-flag style play. Key interests include field tactics, communication with teammates, and equipment upkeep (marker maintenance, protective gear). Paintball days are typically planned with a small group — striking a balance between competitiveness and social fun.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="major">3D Printing & Design</h3>
+                        <p>Samuel designs and 3D prints practical projects and creative models. He works through the full pipeline: concept, CAD modeling (parametric modeling for repeatability), slicing, and printer tuning. Common projects include custom mounts, replacement parts, miniatures, and functional prototypes. He's comfortable troubleshooting print issues (bed adhesion, extrusion, layer shifts) and iterating on designs to improve fit and strength.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="major">Dungeons & Dragons</h3>
+                        <p>Dungeons & Dragons is a regular hobby where Samuel alternates between player and Dungeon Master roles. He values the storytelling, collaborative problem solving, and roleplaying depth the game offers. As DM he prepares adventures, crafts NPCs, and creates maps; as a player he focuses on character development and meaningful in-game choices. Campaigns often span many sessions and are a core social activity among friends.</p>
+                    </section>
+                </article>
+
+                <!-- Article: Family -->
+                <article id="family">
+                    <h2 class="major">Family</h2>
+                    <div class="media-grid">
+                        <div class="photos">
+                            <figure>
+                                <img src="assets/Dad.JPG" alt="Dad" />
+                                <figcaption>David Tack — An avid recreational shooter and engineer</figcaption>
+                            </figure>
+                            <figure>
+                                <img src="assets/PaulTack.JPG" alt="Paul Tack" />
+                                <figcaption>Paul Tack — A linguist and world traveler who lives in Japan</figcaption>
+                            </figure>
+                            <figure>
+                                <img src="assets/SamWaterfall.jpg" alt="Sam Waterfall" />
+                                <figcaption>Samuel Tack — An IT Professional who enjoys gaming and 3D printing</figcaption>
+                            </figure>
+                        </div>
+                        <div class="video-col">
+                            <figure>
+                                <video controls>
+                                    <source src="assets/PaulKendo.mp4" type="video/mp4">
+                                </video>
+                                <figcaption>PaulKendo</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article: Career -->
+                <article id="career">
+                    <h2 class="major">Career</h2>
+                    <section>
+                        <h3>Nestle — Contract Tier 2 IT Support <small>Mar 2023 – Oct 2023</small></h3>
+                        <ul>
+                            <li>Kept track of an inventory system for hardware and software using Asset ID / Serial #.</li>
+                            <li>Worked at the Help desk where users would approach with issues varying from Microsoft Teams errors, Outlook Email issues, and Excel glitches.</li>
+                            <li>Used Active Directory to reset passwords, setup user accounts, and manage user group access.</li>
+                            <li>Made calls and sent emails to update hardware of users with outdated equipment and contacted vendors for hardware service of broken/malfunctioning equipment.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Mistras Group — Full-time PCMS SaaS System Admin <small>Nov 2021 – Feb 2023</small></h3>
+                        <ul>
+                            <li>Worked with Microsoft Azure Active Directory — Groups, Users, Enterprise Applications and Virtual Machines.</li>
+                            <li>Configured AD user groups, MFA Authentication, and Microsoft Defender for Cloud.</li>
+                            <li>Provisioned SaaS installations to newly created Azure Virtual Machines.</li>
+                            <li>Assisted management with change control and handled tickets from AxoSoft and SolarWinds.</li>
+                            <li>Entered SQL scripts to add users into separate databases and created/restored database backups.</li>
+                            <li>Raised, lowered, and decommissioned virtual machine resources within Azure across multiple regions (Europe, Australia, US east/west).</li>
+                            <li>Applied security settings for AD, Azure group access, and SQL database access; created Azure alerts for SLA and SOC2 requirements.</li>
+                            <li>Built application servers in Azure VMs and integrated them into a SaaS multi-application portal.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>KAG — Contract Tier 2 IT Helpdesk Support <small>July 2021 – Sept 2021</small></h3>
+                        <ul>
+                            <li>Active Directory administration — user account creation, password reset, account unlock and permission placement.</li>
+                            <li>Microsoft Azure administration — reset MFA for users and initial MFA setup.</li>
+                            <li>Used a PXE server with multiple images to provision PCs for end users.</li>
+                            <li>Provided call support for tablets used for driver logs; administered VOIP via 8x8 and performed remote troubleshooting with TeamViewer.</li>
+                            <li>Managed transitions: 8x8 to Microsoft Teams, McAfee to Carbon Black, and on-prem AD to cloud-based Azure AD.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Amware Full Service Freight & Logistics — IT Support <small>June 2017 – June 2018</small></h3>
+                        <ul>
+                            <li>Administered email accounts through Office 365 and assigned static IP addresses to machines.</li>
+                            <li>Setup, maintained, and repaired multiple desktops and laptops; administered a pool of Windows Surface devices used with RF guns.</li>
+                            <li>Trained office and warehouse co-workers on the tablet recording system and configured/troubleshot Citrix Receiver.</li>
+                            <li>Troubleshot LAN connectivity and WAN activity for office workers and remote warehouses.</li>
+                        </ul>
+                    </section>
+                </article>
+
+                <!-- Article: Contact -->
+                <article id="contact">
+                    <h2 class="major">Contact</h2>
+                    <p>If you'd like to get in touch, email: <strong>Samuelmtack&#64;gmail&#46;com</strong></p>
+                </article>
 
         
-    </main>
 
-    <footer>
-        <div>Last Updated 9/22/2025</div>
-    </footer>
-        <script>
-            // Build the address in JS so it's not plainly visible in HTML
-            (function(){
-                const user = 'samuelmtack';
-                const domain = 'gmail.com';
-                const email = user + '@' + domain;
+        </div> <!-- /#main -->
 
-                const revealBtn = document.getElementById('revealEmail');
-                const copyBtn = document.getElementById('copyEmail');
-                const display = document.getElementById('emailDisplay');
+        <!-- Footer -->
+        <footer id="footer">
+            <p class="copyright">&copy; Samuel Tack. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+        </footer>
 
-                revealBtn.addEventListener('click', function(){
-                    display.textContent = email;
-                    copyBtn.disabled = false;
-                    revealBtn.textContent = 'Reveal again';
-                });
+    </div> <!-- /#wrapper -->
 
-                copyBtn.addEventListener('click', function(){
-                    navigator.clipboard && navigator.clipboard.writeText
-                        ? navigator.clipboard.writeText(email).then(()=>{
-                                copyBtn.textContent = 'Copied!';
-                                setTimeout(()=>copyBtn.textContent = 'Copy email',1500);
-                            })
-                        : (function(){
-                                const ta = document.createElement('textarea');
-                                ta.value = email; document.body.appendChild(ta); ta.select();
-                                try{document.execCommand('copy'); copyBtn.textContent='Copied!'; setTimeout(()=>copyBtn.textContent='Copy email',1500);}catch(e){}
-                                document.body.removeChild(ta);
-                            })();
-                });
-            })();
-        </script>
+    <!-- BG -->
+    <div id="bg"></div>
+
+    <!-- Dimension scripts -->
+    <script src="Dimension/DimensionAssets/js/jquery.min.js"></script>
+    <script src="Dimension/DimensionAssets/js/browser.min.js"></script>
+    <script src="Dimension/DimensionAssets/js/breakpoints.min.js"></script>
+    <script src="Dimension/DimensionAssets/js/util.js"></script>
+    <script src="Dimension/DimensionAssets/js/main.js"></script>
+
+    
+    <!-- Dimension main.js will handle hash navigation and article panel behavior -->
 </body>
 </html>
