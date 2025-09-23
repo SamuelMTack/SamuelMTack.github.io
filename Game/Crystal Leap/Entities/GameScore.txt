@@ -1,0 +1,25 @@
+{
+  "name": "GameScore",
+  "type": "object",
+  "properties": {
+    "score": {
+      "type": "number",
+      "description": "Player's score"
+    },
+    "level": {
+      "type": "number",
+      "description": "Level reached"
+    },
+    "gems_collected": {
+      "type": "number",
+      "description": "Number of gems collected"
+    },
+    "time_played": {
+      "type": "number",
+      "description": "Time played in seconds"
+    }
+  },
+  "required": [
+    "score"
+  ]
+}

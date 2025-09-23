@@ -1,0 +1,571 @@
+
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { Button } from "@/components/ui/button";
+import { Play, Pause, RotateCcw, Trophy } from "lucide-react";
+
+export default function GameCanvas({ onScoreUpdate, onGameOver }) {
+    const canvasRef = useRef(null);
+    const gameLoopRef = useRef(null);
+    const keysRef = useRef({});
+    const [gameState, setGameState] = useState('playing'); // playing, paused, gameOver
+    const [score, setScore] = useState(0);
+    const [level, setLevel] = useState(1);
+    const [platforms, setPlatforms] = useState([]);
+    const [gems, setGems] = useState([]);
+    const [enemies, setEnemies] = useState([]); // NEW: State for enemies
+    const [levelEndX, setLevelEndX] = useState(1500);
+
+    // Game objects
+    const playerRef = useRef({
+        x: 100,
+        y: 300,
+        width: 24,
+        height: 32,
+        velX: 0,
+        velY: 0,
+        speed: 5,
+        jumpPower: 12,
+        onGround: false,
+        color: '#4F46E5'
+    });
+
+    const particlesRef = useRef([]);
+
+    // --- Procedural Level Generation ---
+    const generateLevel = useCallback((currentLevel) => {
+        const newPlatforms = [];
+        const newGems = [];
+        const newEnemies = []; // NEW: Array for enemies
+        let lastX = 0;
+        let lastY = 450;
+    
+        // Starting platform is always the same
+        newPlatforms.push({ x: 0, y: 450, width: 200, height: 20, type: 'normal' }); // NEW: Add type
+        lastX = newPlatforms[0].x;
+        lastY = newPlatforms[0].y;
+    
+        const platformCount = 15 + currentLevel * 2; // More platforms for higher levels
+    
+        for (let i = 0; i < platformCount; i++) {
+            const minGapX = 60;
+            const maxGapX = 160; // Max horizontal distance for a jump
+            const minGapY = -85; // Max jump height (negative because lower y is higher)
+            const maxGapY = 80;  // How far down you can jump
+    
+            const gapX = minGapX + Math.random() * (maxGapX - minGapX);
+            const gapY = minGapY + Math.random() * (maxGapY - minGapY);
+            
+            const newX = lastX + newPlatforms[newPlatforms.length - 1].width + gapX;
+            let newY = lastY + gapY;
+    
+            // Clamp Y to keep platforms on screen and prevent too extreme vertical changes
+            if (newY < 100) newY = 100 + Math.random() * 50;
+            if (newY > 450) newY = 450 - Math.random() * 50;
+    
+            const minWidth = Math.max(50, 120 - currentLevel * 6); // Platforms get shorter on higher levels
+            const maxWidth = Math.max(80, 180 - currentLevel * 6);
+            const newWidth = minWidth + Math.random() * (maxWidth - minWidth);
+            
+            // NEW: Assign platform type
+            let platformType = 'normal';
+            const typeRoll = Math.random();
+            if (typeRoll > 0.8) { // 20% chance for bouncy
+                platformType = 'bouncy';
+            } else if (typeRoll > 0.65) { // 15% chance for speedy
+                platformType = 'speedy';
+            }
+
+            newPlatforms.push({ x: newX, y: newY, width: newWidth, height: 20, type: platformType }); // NEW: Add type
+    
+            // Occasionally add a gem on the new platform
+            if (Math.random() > 0.4) { // 60% chance for a gem
+                const gemX = newX + newWidth / 2 - 8; // Center the gem on the platform
+                const gemY = newY - 30; // Place it slightly above the platform
+                newGems.push({ x: gemX, y: gemY, collected: false });
+            }
+
+            // NEW: Occasionally add an enemy on wide, normal platforms
+            if (newWidth > 120 && platformType === 'normal' && Math.random() > 0.5) {
+                newEnemies.push({
+                    x: newX + newWidth / 2 - 12,
+                    y: newY - 24, // Place enemy slightly above platform
+                    width: 24,
+                    height: 24,
+                    velX: 1 + currentLevel * 0.2, // Enemy speed increases with level
+                    patrolStart: newX + 10,
+                    patrolEnd: newX + newWidth - 34, // Keep enemy within platform bounds
+                    alive: true
+                });
+            }
+    
+            lastX = newX;
+            lastY = newY;
+        }
+    
+        // Add a final, large platform at the end
+        const endPlatformX = lastX + newPlatforms[newPlatforms.length-1].width + 150;
+        newPlatforms.push({ x: endPlatformX, y: lastY, width: 200, height: 20, type: 'normal' }); // NEW: Add type
+        setLevelEndX(endPlatformX); // Update the level end coordinate
+    
+        setPlatforms(newPlatforms);
+        setGems(newGems);
+        setEnemies(newEnemies); // NEW: Set enemies state
+    
+    }, []);
+
+    const resetLevel = useCallback((newLevel) => {
+        playerRef.current.x = 100;
+        playerRef.current.y = 300;
+        playerRef.current.velX = 0;
+        playerRef.current.velY = 0;
+        particlesRef.current = [];
+        generateLevel(newLevel); // Generate a new level based on the current level number
+    }, [generateLevel]);
+
+    // Create particle effect
+    const createParticles = useCallback((x, y, color = '#FFD700') => {
+        for (let i = 0; i < 8; i++) {
+            particlesRef.current.push({
+                x: x,
+                y: y,
+                velX: (Math.random() - 0.5) * 8,
+                velY: Math.random() * -6 - 2,
+                life: 30,
+                maxLife: 30,
+                color: color
+            });
+        }
+    }, []);
+
+    // Handle keyboard input
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            keysRef.current[e.key.toLowerCase()] = true;
+            if (e.key === ' ' || e.key === 'ArrowUp') { // Changed 'arrowup' to 'ArrowUp' as per outline for consistency
+                e.preventDefault(); // Prevent page scrolling
+            }
+        };
+
+        const handleKeyUp = (e) => {
+            keysRef.current[e.key.toLowerCase()] = false;
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+        };
+    }, []);
+
+    // Game physics and logic
+    const updateGame = useCallback(() => {
+        const canvas = canvasRef.current;
+        if (!canvas || gameState !== 'playing') return;
+
+        const player = playerRef.current;
+
+        // NEW: Player Speed Control based on platform type
+        let currentSpeed = player.speed;
+        let onSpeedyPlatform = false;
+
+        // Handle input
+        if (keysRef.current['a'] || keysRef.current['arrowleft']) {
+            player.velX = Math.max(player.velX - 0.8, -currentSpeed); // NEW: Use currentSpeed
+        } else if (keysRef.current['d'] || keysRef.current['arrowright']) {
+            player.velX = Math.min(player.velX + 0.8, currentSpeed); // NEW: Use currentSpeed
+        } else {
+            player.velX *= 0.8; // Friction
+        }
+
+        if ((keysRef.current[' '] || keysRef.current['w'] || keysRef.current['arrowup']) && player.onGround) {
+            player.velY = -player.jumpPower;
+            player.onGround = false;
+        }
+
+        // Apply gravity
+        player.velY += 0.5;
+        if (player.velY > 15) player.velY = 15; // Terminal velocity
+
+        // Update position
+        player.x += player.velX;
+        player.y += player.velY;
+
+        // Platform collision
+        player.onGround = false;
+        platforms.forEach(platform => {
+            if (player.x < platform.x + platform.width &&
+                player.x + player.width > platform.x &&
+                player.y < platform.y + platform.height &&
+                player.y + player.height > platform.y) {
+                
+                if (player.velY > 0) { // Falling onto a platform
+                    player.y = platform.y - player.height;
+                    player.velY = 0;
+                    player.onGround = true;
+
+                    // NEW: Handle Special Platforms
+                    if (platform.type === 'bouncy') {
+                        player.velY = -player.jumpPower * 1.8; // Super jump
+                        player.onGround = false;
+                        createParticles(player.x + player.width / 2, player.y + player.height, '#EC4899');
+                    }
+                    if (platform.type === 'speedy') {
+                        onSpeedyPlatform = true;
+                    }
+                } else if (player.velY < 0) { // Hitting bottom of platform
+                    player.y = platform.y + platform.height;
+                    player.velY = 0;
+                }
+            }
+        });
+
+        // NEW: Apply speedy platform effect
+        if (onSpeedyPlatform) {
+            player.velX = Math.sign(player.velX) * Math.max(Math.abs(player.velX), player.speed * 1.7);
+            currentSpeed = player.speed * 1.7;
+        }
+
+        // NEW: Update enemies
+        const newEnemies = [...enemies];
+        newEnemies.forEach(enemy => {
+            if (enemy.alive) {
+                enemy.x += enemy.velX;
+                // Reverse direction if hitting patrol boundaries
+                if (enemy.x <= enemy.patrolStart || enemy.x + enemy.width >= enemy.patrolEnd) {
+                    enemy.velX *= -1;
+                }
+            }
+        });
+
+        // NEW: Player-Enemy collision
+        let scoreChanged = false; // Flag to check if score was updated this frame
+        newEnemies.forEach(enemy => {
+            if (enemy.alive &&
+                player.x < enemy.x + enemy.width &&
+                player.x + player.width > enemy.x &&
+                player.y < enemy.y + enemy.height &&
+                player.y + player.height > enemy.y) {
+                
+                // Player jumps on top of enemy (stomps)
+                if (player.velY > 0 && (player.y + player.height) < (enemy.y + enemy.height / 2)) {
+                    enemy.alive = false; // Defeat enemy
+                    player.velY = -player.jumpPower * 0.6; // Small bounce for player
+                    setScore(prev => { 
+                        scoreChanged = true;
+                        return prev + 250;
+                    });
+                    createParticles(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, '#EF4444');
+                } else { // Player hits enemy from side/below - Game Over
+                    setGameState(prev => {
+                        if (prev === 'playing') { // Ensure onGameOver only called once
+                            onGameOver(score, level);
+                        }
+                        return 'gameOver';
+                    });
+                }
+            }
+        });
+        setEnemies(newEnemies); // Update enemies state after processing (filter alive ones during render or next update)
+
+
+        // Gem collection
+        const newGems = [...gems]; // Create a mutable copy
+        newGems.forEach(gem => { // Iterate through the mutable copy
+            if (!gem.collected &&
+                player.x < gem.x + 16 &&
+                player.x + player.width > gem.x &&
+                player.y < gem.y + 16 &&
+                player.y + player.height > gem.y) {
+                
+                createParticles(gem.x + 8, gem.y + 8, '#FFD700');
+                gem.collected = true; // Mark as collected in the mutable copy
+                setScore(prev => {
+                    scoreChanged = true;
+                    return prev + 100;
+                });
+            }
+        });
+
+        if (scoreChanged) { // Only update state if score actually changed
+            setGems(newGems); // Update gems state once
+            onScoreUpdate(score + (newGems.filter(g => g.collected).length * 100)); // Pass correct score for update
+        }
+
+        // Update particles
+        particlesRef.current = particlesRef.current.filter(particle => {
+            particle.x += particle.velX;
+            particle.y += particle.velY;
+            particle.velY += 0.2; // Particle gravity
+            particle.life--;
+            return particle.life > 0;
+        });
+
+        // Check if player fell off the screen
+        if (player.y > canvas.height) { // Changed from canvas.height + 50 to canvas.height per outline
+            // By setting the state to 'gameOver' here, we ensure onGameOver is only called once.
+            setGameState(prev => {
+                if (prev === 'playing') {
+                    onGameOver(score, level);
+                }
+                return 'gameOver';
+            });
+        }
+
+        // Check level completion (reached the end)
+        if (player.x > levelEndX + 100) { // Player passed the end platform
+            const newLevel = level + 1;
+            setLevel(newLevel);
+            resetLevel(newLevel);
+        }
+    }, [gameState, score, level, platforms, gems, enemies, levelEndX, createParticles, onScoreUpdate, onGameOver, resetLevel]); // NEW: Add enemies to dependencies
+
+    // Render game
+    const render = useCallback(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        const player = playerRef.current;
+
+        // Clear canvas with gradient background
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, '#0F172A');
+        gradient.addColorStop(1, '#1E293B');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Translate based on player position for camera follow
+        ctx.save();
+        const cameraX = Math.max(0, Math.min(player.x - canvas.width / 2, levelEndX - canvas.width + 250)); // Adjusted to follow end of level
+        ctx.translate(-cameraX, 0);
+
+        // NEW: Draw Platforms with different colors
+        const platformColors = {
+            normal: ['#10B981', '#059669'], // Green
+            bouncy: ['#EC4899', '#DB2777'], // Pink
+            speedy: ['#38BDF8', '#0EA5E9'], // Light Blue
+        };
+
+        platforms.forEach(platform => {
+            const colors = platformColors[platform.type] || platformColors.normal;
+            const platformGradient = ctx.createLinearGradient(0, platform.y, 0, platform.y + platform.height);
+            platformGradient.addColorStop(0, colors[0]);
+            platformGradient.addColorStop(1, colors[1]);
+            ctx.fillStyle = platformGradient;
+            ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+            
+            // Platform shine effect
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.fillRect(platform.x, platform.y, platform.width, 2);
+        });
+
+        // NEW: Draw enemies
+        enemies.forEach(enemy => {
+            if (enemy.alive) {
+                const enemyGradient = ctx.createLinearGradient(0, enemy.y, 0, enemy.y + enemy.height);
+                enemyGradient.addColorStop(0, '#F87171'); // Light red
+                enemyGradient.addColorStop(1, '#EF4444'); // Red
+                ctx.fillStyle = enemyGradient;
+                ctx.beginPath();
+                ctx.roundRect(enemy.x, enemy.y, enemy.width, enemy.height, 4);
+                ctx.fill();
+
+                // Eyes for enemy
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(enemy.x + 5, enemy.y + 6, 4, 4);
+                ctx.fillRect(enemy.x + 15, enemy.y + 6, 4, 4);
+            }
+        });
+
+        // Draw gems with glow effect
+        gems.forEach(gem => {
+            if (!gem.collected) {
+                // Glow effect
+                ctx.shadowColor = '#FFD700';
+                ctx.shadowBlur = 15;
+                
+                // Rotating gem effect
+                ctx.save();
+                ctx.translate(gem.x + 8, gem.y + 8);
+                ctx.rotate(Date.now() * 0.005);
+                
+                const gemGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 8);
+                gemGradient.addColorStop(0, '#FEF08A');
+                gemGradient.addColorStop(1, '#F59E0B');
+                ctx.fillStyle = gemGradient;
+                
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i * Math.PI * 2) / 6;
+                    const x = Math.cos(angle) * 8;
+                    const y = Math.sin(angle) * 8;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.fill();
+                
+                ctx.restore();
+                ctx.shadowBlur = 0;
+            }
+        });
+
+        // Draw particles
+        particlesRef.current.forEach(particle => {
+            const alpha = particle.life / particle.maxLife;
+            ctx.fillStyle = `${particle.color}${Math.floor(alpha * 255).toString(16).padStart(2, '0')}`;
+            ctx.fillRect(particle.x, particle.y, 4, 4);
+        });
+
+        // Draw player with glow and smooth animation
+        ctx.shadowColor = player.color;
+        ctx.shadowBlur = 10;
+        
+        const playerGradient = ctx.createLinearGradient(0, player.y, 0, player.y + player.height);
+        playerGradient.addColorStop(0, '#6366F1');
+        playerGradient.addColorStop(1, '#4F46E5');
+        ctx.fillStyle = playerGradient;
+        
+        // Player body with rounded corners
+        ctx.beginPath();
+        ctx.roundRect(player.x, player.y, player.width, player.height, 6);
+        ctx.fill();
+        
+        // Player eyes
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(player.x + 6, player.y + 8, 4, 4);
+        ctx.fillRect(player.x + 14, player.y + 8, 4, 4);
+        
+        ctx.restore();
+    }, [platforms, gems, enemies, levelEndX]); // NEW: Add enemies to dependencies
+
+    // Game loop - Changed to setInterval as per outline
+    useEffect(() => {
+        if (gameState === 'playing') {
+            gameLoopRef.current = setInterval(() => {
+                updateGame();
+                render();
+            }, 16); // ~60 FPS
+        } else if (gameLoopRef.current) {
+            clearInterval(gameLoopRef.current);
+        }
+
+        return () => {
+            if (gameLoopRef.current) {
+                clearInterval(gameLoopRef.current);
+            }
+        };
+    }, [gameState, updateGame, render]);
+
+    const resetGame = () => {
+        setScore(0);
+        setLevel(1);
+        setGameState('playing');
+        resetLevel(1); // Start a new game with level 1 generation
+    };
+
+    const togglePause = () => {
+        setGameState(gameState === 'playing' ? 'paused' : 'playing');
+    };
+
+    // Initialize canvas and first level
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (canvas) {
+            canvas.width = 800;
+            canvas.height = 500;
+            generateLevel(1); // Generate the first level on mount
+        }
+    }, [generateLevel]);
+    
+    // Rerender when platforms or gems change (e.g., after new level generation)
+    useEffect(() => {
+        // Only render if not currently playing (game loop will handle it otherwise)
+        // or if it's the initial render.
+        if (gameState !== 'playing') {
+            render();
+        }
+    }, [platforms, gems, enemies, render, gameState]); // NEW: Added enemies here
+
+    return (
+        <div className="relative bg-slate-900 rounded-xl overflow-hidden shadow-2xl">
+            <canvas
+                ref={canvasRef}
+                className="block w-full h-auto border border-slate-700"
+                style={{ imageRendering: 'pixelated' }}
+            />
+            
+            {/* Game UI Overlay */}
+            <div className="absolute top-4 left-4 text-white space-y-2">
+                <div className="bg-black/50 px-3 py-1 rounded-lg backdrop-blur">
+                    <span className="text-yellow-400 font-bold">Score: {score}</span>
+                </div>
+                <div className="bg-black/50 px-3 py-1 rounded-lg backdrop-blur">
+                    <span className="text-blue-400 font-bold">Level: {level}</span>
+                </div>
+            </div>
+
+            {/* Controls */}
+            <div className="absolute top-4 right-4 flex gap-2">
+                <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={togglePause}
+                    className="bg-black/50 border-slate-600 hover:bg-black/70 backdrop-blur text-white"
+                >
+                    {gameState === 'playing' ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                </Button>
+                <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={resetGame}
+                    className="bg-black/50 border-slate-600 hover:bg-black/70 backdrop-blur text-white"
+                >
+                    <RotateCcw className="w-4 h-4" />
+                </Button>
+            </div>
+
+            {/* Game Over Screen */}
+            {gameState === 'gameOver' && (
+                <div className="absolute inset-0 bg-black/80 flex items-center justify-center backdrop-blur">
+                    <div className="bg-slate-800 p-8 rounded-xl text-center space-y-4 border border-slate-600">
+                        <Trophy className="w-12 h-12 text-yellow-400 mx-auto" />
+                        <h2 className="text-2xl font-bold text-white">Game Over!</h2>
+                        <p className="text-slate-300">Final Score: <span className="text-yellow-400 font-bold">{score}</span></p>
+                        <p className="text-slate-300">Level Reached: <span className="text-blue-400 font-bold">{level}</span></p>
+                        <Button onClick={resetGame} className="bg-indigo-600 hover:bg-indigo-700">
+                            Play Again
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {/* Pause Screen */}
+            {gameState === 'paused' && (
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center backdrop-blur">
+                    <div className="bg-slate-800 p-6 rounded-xl text-center border border-slate-600">
+                        <h2 className="text-xl font-bold text-white mb-4">Game Paused</h2>
+                        <Button onClick={togglePause} className="bg-indigo-600 hover:bg-indigo-700">
+                            Resume
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {/* Instructions */}
+            <div className="absolute bottom-4 left-4 right-4">
+                <div className="bg-black/50 p-3 rounded-lg backdrop-blur text-white text-sm">
+                    <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+                        <span>🎮 <strong>Arrow Keys / WASD:</strong> Move & Jump</span>
+                        <span>💎 <strong>Goal:</strong> Collect gems and reach the end!</span>
+                        <span>⚠️ <strong>Enemies:</strong> Stomp to defeat!</span>
+                        <span> platforms: 🟣Bouncy, 🔵Speedy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
