@@ -94,3 +94,43 @@ a:focus,.button:focus,button:focus{outline:3px solid rgba(14,165,161,0.15);outli
 .email-display{font-family:monospace;color:var(--primary);margin-left:.4rem}
 
 .tagline{font-weight:600}
+
+/* Fix: ensure readable text in the Game section (was white-on-white) */
+#game .card{ color: #0f1724; }
+#game .card p, #game .card h2, #game .card h3, #game .card span{ color: #0f1724; }
+/* keep touch button labels white for contrast */
+#game .card .touch-btn{ color: #ffffff; }
+#game .card .button-link, #game .card a{ color: var(--primary); }
+
+/* Make pause/restart buttons in the Game card clearly visible and match site accent */
+#game .card .button-link{
+    background: var(--accent);
+    color: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: .45rem .6rem;
+    border-radius:8px;
+    cursor:pointer;
+    box-shadow: 0 6px 18px rgba(14,165,161,0.12);
+}
+#game .card .button-link:hover{ filter:brightness(0.95); }
+
+/* Make controls larger and touch-friendly on small screens */
+@media (max-width:720px){
+    #game .card .button-link{
+        padding: .8rem 1rem;
+        font-size:1.05rem;
+        border-radius:12px;
+    }
+    /* enlarge on-screen touch buttons as well */
+    #touch-controls .touch-btn{
+        font-size:28px;
+        padding:14px 18px;
+        min-width:72px;
+        border-radius:14px;
+        background: var(--accent);
+        color: #fff;
+        border: 1px solid rgba(0,0,0,0.06);
+        box-shadow: 0 10px 24px rgba(14,165,161,0.12);
+    }
+    #touch-controls .touch-btn.active{ background: color-mix(in srgb, var(--accent) 85%, black 15%); }
+}
