@@ -1,0 +1,14 @@
+Make the Current Homepage index.html a Link in the New Theme Halcyonic
+
+Use the Halcyonic Home Page to Host things like 
+
+A. Photo Gallery
+B. Contact Form
+   1.Include Facebook and Linkdin and Phone
+C. Typeing Speed Test
+D. Weather App
+E. Clock App
+F. Calander App
+
+
+
