@@ -9,9 +9,46 @@
     <!-- Dimension theme styles (local) -->
     <link rel="stylesheet" href="Dimension/DimensionAssets/css/main.css">
     <noscript><link rel="stylesheet" href="Dimension/DimensionAssets/css/noscript.css" /></noscript>
+    <style>
+    /* Games tab overrides: ensure visibility when unselected and clear selected state */
+    /* Use more specific selectors and !important to override theme defaults */
+    #game button.button.small,
+    #game .button.small { 
+        background: rgba(244,245,247,0.9) !important; /* light gray */
+        color: #111 !important; /* dark text so it's visible */
+        border: 1px solid rgba(0,0,0,0.08) !important;
+        box-shadow: none !important;
+    }
+    #tab-platformer.button.small.primary,
+    #tab-breakout.button.small.primary,
+    #game .button.small.primary {
+        background: #6366F1 !important; /* purple primary to match theme */
+        color: #fff !important;
+        border-color: transparent !important;
+    }
+    #game .button.small:focus { outline: 2px solid rgba(99,102,241,0.18) !important; }
+
+    /* Make the Breakout iframe responsive and preserve an appropriate aspect ratio. Use width + aspect-ratio so parent can size it. */
+    #breakout-container iframe {
+        width: 100% !important;
+        max-width: 900px;
+        aspect-ratio: 16 / 10; /* matches original 800x500 */
+        height: auto !important;
+        border-radius: 8px;
+        border: 0;
+        box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* Small screens: use a taller aspect ratio to reduce vertical cropping */
+    @media (max-width: 720px) {
+        #breakout-container iframe { aspect-ratio: 4 / 3; }
+    }
+    </style>
 </head>
 <body class="is-preload">
-    
+
     <!-- Wrapper -->
     <div id="wrapper">
 
@@ -33,7 +70,7 @@
                     <li><a href="#career">Career</a></li>
                     <li><a href="#education">Education</a></li>
                     <li><a href="#contact">Contact</a></li>
-                    <li><a href="#game">Game</a></li>
+                    <li><a href="#game">Games</a></li>
                 </ul>
             </nav>
         </header>
@@ -185,17 +222,28 @@
 
                 <!-- Article: Game -->
                 <article id="game">
-                    <h2 class="major">Game</h2>
+                    <h2 class="major">Games</h2>
                     <div class="card">
-                        <p>Play a small platformer demo below. Controls: Arrow keys or WASD to move, Space/W/Up to jump.</p>
+                        <p>Choose a game below. Platformer is inline; Breakout opens in the embedded player.</p>
 
-                        <div style="text-align:center; margin-top:1rem">
+                        <div style="text-align:center; margin-top:0.5rem; display:flex; gap:8px; justify-content:center;">
+                            <button id="tab-platformer" class="button small primary">Platformer</button>
+                            <button id="tab-breakout" class="button small">Breakout</button>
+                        </div>
+
+                        <!-- Platformer container (default visible) -->
+                        <div id="platformer-container" style="text-align:center; margin-top:1rem">
                             <canvas id="gameCanvas" width="720" height="420" style="max-width:100%; background:#081226; border:1px solid rgba(255,255,255,0.06);"></canvas>
                             <div style="margin-top:8px; display:flex; gap:12px; justify-content:center; align-items:center;">
                                 <span id="game-score" style="color:#ffd700;font-weight:700">Score: 0</span>
                                 <button id="game-pause" class="button-link">Pause</button>
                                 <button id="game-restart" class="button-link">Restart</button>
                             </div>
+                        </div>
+
+                        <!-- Breakout container (hidden until selected) -->
+                        <div id="breakout-container" style="display:none; text-align:center; margin-top:1rem;">
+                            <iframe id="breakout-iframe" src="Breakout  Game/Breakout.html" title="Breakout" style="width:100%; max-width:720px; height:460px; border:0; background:#081226; box-shadow:0 8px 30px rgba(2,6,23,0.6);"></iframe>
                         </div>
 
                         <!-- Touch controls for mobile devices -->
@@ -374,6 +422,51 @@
 
                             generate();
                             requestAnimationFrame(loop);
+                            // expose simple control hooks so external scripts can pause/resume
+                            window.__platformer = {
+                                pause: () => { state.paused = true; pauseBtn.textContent = 'Resume'; },
+                                resume: () => { state.paused = false; pauseBtn.textContent = 'Pause'; },
+                                restart: () => { generate(); }
+                            };
+                        })();
+                        </script>
+
+                        <script>
+                        // Tabs: switch between platformer and breakout iframe
+                        (function(){
+                            const tabPlatformer = document.getElementById('tab-platformer');
+                            const tabBreakout = document.getElementById('tab-breakout');
+                            const platformerContainer = document.getElementById('platformer-container');
+                            const breakoutContainer = document.getElementById('breakout-container');
+                            const breakoutIframe = document.getElementById('breakout-iframe');
+
+                            function showPlatformer(){
+                                platformerContainer.style.display = '';
+                                breakoutContainer.style.display = 'none';
+                                tabPlatformer.classList.add('primary');
+                                tabBreakout.classList.remove('primary');
+                                // resume platformer
+                                if(window.__platformer) window.__platformer.resume();
+                            }
+
+                            function showBreakout(){
+                                platformerContainer.style.display = 'none';
+                                breakoutContainer.style.display = '';
+                                tabPlatformer.classList.remove('primary');
+                                tabBreakout.classList.add('primary');
+                                // pause platformer
+                                if(window.__platformer) window.__platformer.pause();
+                                // lazy-load iframe src if not set (helps initial load)
+                                if(breakoutIframe && (!breakoutIframe.getAttribute('src') || breakoutIframe.getAttribute('src')==='')){
+                                    breakoutIframe.setAttribute('src','Breakout  Game/Breakout.html');
+                                }
+                            }
+
+                            tabPlatformer.addEventListener('click', showPlatformer);
+                            tabBreakout.addEventListener('click', showBreakout);
+
+                            // default
+                            showPlatformer();
                         })();
                         </script>
                     </div>

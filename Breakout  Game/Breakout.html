@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Breakout Game</title>
     <style>
+        /* Reset spacing so iframe shows only the game canvas area */
+        html,body{ height:100%; margin:0; padding:0; }
         body {
-            margin: 0;
-            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            justify-content: flex-start;
+            min-height: 100%;
             background: linear-gradient(135deg, #1e3c72, #2a5298);
             font-family: Arial, sans-serif;
             color: white;
+            box-sizing: border-box;
+            padding: 12px;
         }
         
         h1 {
@@ -25,10 +27,16 @@
         
         #game-container {
             position: relative;
-            margin: 20px auto;
+            margin: 6px auto;
+            width: 100%;
+            max-width: 900px;
         }
-        
+
+        /* Make canvas fill container while preserving internal drawing resolution */
         canvas {
+            width: 100%;
+            height: auto;
+            display: block;
             background: #000;
             border-radius: 8px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
@@ -74,6 +82,7 @@
     <div id="score-display">Score: <span id="score">0</span> | Lives: <span id="lives">3</span> | Level: <span id="level">1</span></div>
     
     <div id="game-container">
+        <!-- keep internal resolution 800x500 but allow CSS scaling to fit iframe -->
         <canvas id="gameCanvas" width="800" height="500"></canvas>
     </div>
     
@@ -103,15 +112,26 @@
         let gameRunning = false;
 
         // Paddle properties (slower movement)
+        const INTERNAL_W = 800, INTERNAL_H = 500; // internal drawing resolution
         const paddleHeight = 15;
         const paddleWidth = 100;
-        let paddleX = (canvas.width - paddleWidth) / 2;
-        const paddleSpeed = 16; // Slower paddle speed
+        let paddleX = (INTERNAL_W - paddleWidth) / 2;
+        const paddleSpeed = 16; // Slower paddle speed (in internal px)
+
+        // Track scale between CSS display size and internal resolution
+        let scale = 1;
+        function updateScale(){
+            const rect = canvas.getBoundingClientRect();
+            scale = rect.width / INTERNAL_W;
+            // adjust displayed height to keep internal aspect
+            canvas.style.height = (INTERNAL_H * scale) + 'px';
+        }
 
         // Ball properties (slower movement)
         const ballRadius = 10;
-        let ballX = canvas.width / 2;
-        let ballY = canvas.height - 30;
+    // initialize ball positions in internal coordinates
+    let ballX = INTERNAL_W / 2;
+    let ballY = INTERNAL_H - 30;
         let ballDX = 2; // Slower horizontal speed
         let ballDY = -2; // Slower vertical speed
         const ballSpeed = 2; // Slower overall ball speed
@@ -137,10 +157,10 @@
             }
         }
 
-        // Draw paddle
+        // Draw paddle (coordinates are internal)
         function drawPaddle() {
             ctx.beginPath();
-            ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+            ctx.rect(paddleX, INTERNAL_H - paddleHeight, paddleWidth, paddleHeight);
             ctx.fillStyle = '#4CAF50';
             ctx.fill();
             ctx.closePath();
@@ -197,8 +217,8 @@
 
         // Draw everything
         function draw() {
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Clear canvas (clear internal resolution)
+            ctx.clearRect(0, 0, INTERNAL_W, INTERNAL_H);
             
             // Draw game elements
             drawBricks();
@@ -206,7 +226,7 @@
             drawPaddle();
             
             // Draw score
-            ctx.font = '16px Arial';
+            ctx.font = Math.max(12, 16) + 'px Arial';
             ctx.fillStyle = '#fff';
             ctx.fillText('Score: ' + score, 8, 20);
         }
@@ -219,7 +239,7 @@
             ballY += ballDY;
 
             // Wall collision (left/right)
-            if (ballX + ballDX > canvas.width - ballRadius || ballX + ballDX < ballRadius) {
+            if (ballX + ballDX > INTERNAL_W - ballRadius || ballX + ballDX < ballRadius) {
                 ballDX = -ballDX;
             }
 
@@ -228,7 +248,7 @@
                 ballDY = -ballDY;
             }
             // Bottom wall - lose life
-            else if (ballY + ballDY > canvas.height - ballRadius) {
+            else if (ballY + ballDY > INTERNAL_H - ballRadius) {
                 lives--;
                 livesElement.textContent = lives;
                 if (lives === 0) {
@@ -239,7 +259,7 @@
             }
 
             // Paddle collision
-            if (ballY + ballDY > canvas.height - ballRadius - paddleHeight &&
+            if (ballY + ballDY > INTERNAL_H - ballRadius - paddleHeight &&
                 ballX > paddleX && 
                 ballX < paddleX + paddleWidth) {
                 
@@ -254,10 +274,10 @@
                 for (let r = 0; r < brickRowCount; r++) {
                     const brick = bricks[c][r];
                     if (brick.status === 1) {
-                        if (ballX > brick.x && 
-                            ballX < brick.x + brickWidth && 
-                            ballY > brick.y && 
-                            ballY < brick.y + brickHeight) {
+                                    if (ballX > brick.x && 
+                                        ballX < brick.x + brickWidth && 
+                                        ballY > brick.y && 
+                                        ballY < brick.y + brickHeight) {
                             
                             ballDY = -ballDY;
                             brick.status = 0;
@@ -294,8 +314,8 @@
 
         // Reset ball position
         function resetBall() {
-            ballX = canvas.width / 2;
-            ballY = canvas.height - 30;
+            ballX = INTERNAL_W / 2;
+            ballY = INTERNAL_H - 30;
             ballDX = (Math.random() > 0.5 ? 1 : -1) * ballSpeed; // Slower random direction
             ballDY = -ballSpeed;
         }
@@ -350,7 +370,7 @@
             if (e.key === 'ArrowLeft') {
                 paddleX = Math.max(0, paddleX - paddleSpeed);
             } else if (e.key === 'ArrowRight') {
-                paddleX = Math.min(canvas.width - paddleWidth, paddleX + paddleSpeed);
+                paddleX = Math.min(INTERNAL_W - paddleWidth, paddleX + paddleSpeed);
             } else if (e.key === ' ') {
                 if (!gameRunning) {
                     startGame();
@@ -376,6 +396,22 @@
         // Initialize the game
         initBricks();
         draw();
+        // ensure proper scaling in iframe/container
+        function handleResize(){
+            updateScale();
+            // set canvas internal drawing buffer to internal size so all drawing uses internal coordinates
+            canvas.width = INTERNAL_W;
+            canvas.height = INTERNAL_H;
+            // switch to scaled drawing context (use CSS for display size)
+            // no further changes needed; drawing functions use INTERNAL_W/INTERNAL_H coordinates
+            draw();
+        }
+
+        // Observe size changes
+        const ro = new ResizeObserver(handleResize);
+        ro.observe(canvas);
+        // initial scale
+        handleResize();
         gameLoop();
     </script>
 </body>
