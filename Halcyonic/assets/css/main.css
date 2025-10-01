@@ -2,9 +2,47 @@
 
 /*
 	Halcyonic by HTML5 UP
-	html5up.net | @ajlkn
+	
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
+
+/* Calendar.js integration tweaks */
+.calendar-wrapper {
+  max-width: 980px;
+  margin: 2rem auto;
+  background: rgba(255,255,255,0.02);
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+#calendar {
+  min-height: 420px;
+}
+
+/* Small screens tweak */
+@media screen and (max-width: 736px) {
+  .calendar-wrapper { padding: 0.5rem; margin: 1rem; }
+}
+
+/* Weather app styles (adapted from Weather/style.css, tuned for Halcyonic) */
+.weather-app {
+	max-width: 720px;
+	margin: 2rem auto;
+	padding: 1.25rem;
+	border-radius: 10px;
+	background: linear-gradient(180deg,#f7f7f7,#ffffff);
+	box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+	color: #333;
+}
+.weather-app .header h4 { color: #ED391B; font-weight:700; margin:0 0 0.5rem 0; }
+.weather-search { margin: 0.75rem 0; text-align:center; }
+.weather-search .input-box { width: 80%; max-width:420px; padding:10px; border-radius:8px; border:1px solid #e6e6e6; }
+.weather-body-adapt { display:none; margin-top:1rem; padding:1rem; border-radius:8px; background: linear-gradient(180deg,#ED391B,#e4603a); color:#fff; }
+.weather-body-adapt .temp { font-size:3.5rem; font-weight:700; }
+.weather-body-adapt .weather { font-size:1.25rem; margin-top:0.5rem; }
+.weather-body-adapt .min-max { font-size:0.95rem; margin-top:0.5rem; }
+@media screen and (max-width:736px){ .weather-app{ padding:0.75rem; margin:1rem; } .weather-search .input-box{ width:100%; } .weather-body-adapt .temp{font-size:2.5rem;} }
 
 html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
@@ -1622,6 +1660,69 @@ input, select, textarea {
 			color: #373f42;
 			margin: 0 0 0.25em 0;
 		}
+
+		/* Gallery Styles */
+
+		.gallery-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+			grid-gap: 18px;
+		}
+
+		.gallery-item {
+			overflow: hidden;
+			border-radius: 8px;
+			box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+			transition: transform 0.35s ease, box-shadow 0.35s ease;
+		}
+
+		.gallery-item img {
+			display: block;
+			width: 100%;
+			height: 160px;
+			object-fit: cover;
+			transition: transform 0.45s ease;
+		}
+
+		.gallery-item:hover {
+			transform: translateY(-6px);
+			box-shadow: 0 18px 30px rgba(0,0,0,0.12);
+		}
+
+		.gallery-item:hover img {
+			transform: scale(1.06);
+		}
+
+		@media screen and (max-width: 736px) {
+			.gallery-item img { height: 120px; }
+		}
+
+		/* Typing Test Styles */
+		.typing-box {
+			background: linear-gradient(180deg, #fff, #fbfbfb);
+			border-radius: 8px;
+			padding: 18px;
+			box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+		}
+		.typing-box .prompt {
+			font-size: 1.05em;
+			padding: 10px;
+			border-left: 4px solid #ED391B;
+			margin-bottom: 12px;
+			background: #fff8f6;
+		}
+		.typing-box textarea {
+			width: 100%;
+			border: 1px solid #e6e6e6;
+			border-radius: 6px;
+			padding: 10px;
+			resize: vertical;
+			min-height: 80px;
+			font-family: 'Yanone Kaffeesatz', sans-serif;
+		}
+		.typing-controls { display:flex; gap:12px; align-items:center; margin-top:8px; }
+		.typing-result { margin-top:10px; padding:10px; background:#f4f8fb; border-radius:6px; }
+
 
 		#content h3 {
 			color: #96a9b5;

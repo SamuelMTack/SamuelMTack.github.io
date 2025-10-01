@@ -20,7 +20,8 @@ searchInputBox.addEventListener('keypress', (event) => {
 //get waether report
 
 function getWeatherReport(city) {
-    fetch(`${weatherApi.baseUrl}?q=${city}&appid=${weatherApi.key}&units=metric`)  // fetch method fetching the data from  base url ...metric is used for unit in celcius......here i am appending the base url to get data by city name .  
+    // Use imperial units (Fahrenheit, mph)
+    fetch(`${weatherApi.baseUrl}?q=${city}&appid=${weatherApi.key}&units=imperial`)  // fetch method fetching the data from base url; units=imperial returns temps in °F and wind in mph
         .then(weather => {   //weather is from api
             return weather.json(); // return data from api in JSON
         }).then(showWeaterReport);  // calling showweatherreport function
@@ -49,19 +50,19 @@ function showWeaterReport(weather) {
     let weather_body = document.getElementById('weather-body');
     weather_body.innerHTML =
         `
-    <div class="location-deatils">
+        <div class="location-deatils">
         <div class="city" id="city">${weather.name}, ${weather.sys.country}</div>
         <div class="date" id="date"> ${dateManage(todayDate)}</div>
     </div>
     <div class="weather-status">
-        <div class="temp" id="temp">${Math.round(weather.main.temp)}&deg;C </div>
+        <div class="temp" id="temp">${Math.round(weather.main.temp)}&deg;F </div>
         <div class="weather" id="weather"> ${weather.weather[0].main} <i class="${getIconClass(weather.weather[0].main)}"></i>  </div>
-        <div class="min-max" id="min-max">${Math.floor(weather.main.temp_min)}&deg;C (min) / ${Math.ceil(weather.main.temp_max)}&deg;C (max) </div>
+        <div class="min-max" id="min-max">${Math.floor(weather.main.temp_min)}&deg;F (min) / ${Math.ceil(weather.main.temp_max)}&deg;F (max) </div>
         <div id="updated_on">Updated as of ${getTime(todayDate)}</div>
     </div>
     <hr>
     <div class="day-details">
-        <div class="basic">Feels like ${weather.main.feels_like}&deg;C | Humidity ${weather.main.humidity}%  <br> Pressure ${weather.main.pressure} mb | Wind ${weather.wind.speed} KMPH</div>
+        <div class="basic">Feels like ${weather.main.feels_like}&deg;F | Humidity ${weather.main.humidity}%  <br> Pressure ${weather.main.pressure} mb | Wind ${weather.wind.speed} MPH</div>
     </div>
     `;
     parent.append(weather_body);

@@ -21,7 +21,7 @@
 							<div class="col-12">
 
 								<!-- Logo -->
-									<h1><a href="../index.html" id="logo">Halcyonic</a></h1>
+									<h1><a href="../index.html" id="logo"></a></h1>
 
 								<!-- Nav -->
 									<nav id="nav">
@@ -37,14 +37,22 @@
 					</div>
 				</section>
 
-								<!-- Main Content Placeholder: Typing Test -->
-									<section>
-										<header>
-											<h2>Weather</h2>
-											<h3>Check the Local Weather</h3>
-										</header>
-										<p></p>
-									</section>
+								<!-- Main Content: Weather App -->
+								<section>
+									<header>
+										<h2>Weather</h2>
+										<h3>Check the Local Weather</h3>
+									</header>
+									<div class="weather-app" id="parent">
+										<div class="header"><h4>Get Weather</h4></div>
+										<div class="weather-search">
+											<input type="text" id="input-box" class="input-box" placeholder="Enter city name" />
+										</div>
+										<div class="weather-body-adapt" id="weather-body">
+											<!-- populated by script -->
+										</div>
+									</div>
+								</section>
 
 							</div>
 							<div class="col-3 col-12-medium">
@@ -56,6 +64,49 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<!-- Weather app script & resources -->
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+			<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+			<script src="../Weather/script.js"></script>
+			<script>
+			// Prevent Weather script from changing the entire page background; patch changeBg to target the widget container.
+			(function(){
+				function patch() {
+					if (typeof changeBg === 'function') {
+						var original = changeBg;
+						changeBg = function(status){
+							var el = document.querySelector('.weather-app');
+							if (!el) { return original(status); }
+							if (status === 'Clouds') {
+								el.style.backgroundImage = 'url(../Weather/img/clouds.jpg)';
+							} else if (status === 'Rain') {
+								el.style.backgroundImage = 'url(../Weather/img/rainy.jpg)';
+							} else if (status === 'Clear') {
+								el.style.backgroundImage = 'url(../Weather/img/clear.jpg)';
+							} else if (status === 'Snow') {
+								el.style.backgroundImage = 'url(../Weather/img/snow.jpg)';
+							} else if (status === 'Sunny') {
+								el.style.backgroundImage = 'url(../Weather/img/sunny.jpg)';
+							} else if (status === 'Thunderstorm') {
+								el.style.backgroundImage = 'url(../Weather/img/thunderstrom.jpg)';
+							} else if (status === 'Drizzle') {
+								el.style.backgroundImage = 'url(../Weather/img/drizzle.jpg)';
+							} else if (status === 'Mist' || status === 'Haze' || status === 'Fog') {
+								el.style.backgroundImage = 'url(../Weather/img/mist.jpg)';
+							} else {
+								el.style.backgroundImage = 'url(../Weather/img/bg.jpg)';
+							}
+						};
+						return true;
+					}
+					return false;
+				};
+				// Try patching now, or wait until script defines changeBg
+				if (!patch()) {
+					var t = setInterval(function(){ if (patch()) { clearInterval(t); } }, 200);
+				}
+			})();
+			</script>
 
 	</body>
 </html>

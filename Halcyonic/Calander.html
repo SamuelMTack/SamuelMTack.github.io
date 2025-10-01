@@ -10,41 +10,115 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<!-- Calendar.js styles (from sibling Calander package) -->
+		<link rel="stylesheet" href="../Calander/dist/calendar.js.css" />
+			<!-- Halcyonic theme overrides for Calendar.js -->
+			<style>
+			:root {
+			  /* Halcyonic accent and header colors */
+			  --halcy-accent: #ED391B; /* main accent */
+			  --halcy-header: #3B4346; /* header/dark */
+			  --halcy-light: #ffffff;
+			  /* Calendar.js variable overrides */
+			  --calendar-js-event-color: var(--halcy-accent);
+			  --calendar-js-event-text-color: var(--halcy-light);
+			  --calendar-js-event-color-all-day: #a82a12;
+			  --calendar-js-event-text-color-all-day: var(--halcy-light);
+			  --calendar-js-dark-color: var(--halcy-header);
+			  --calendar-js-light-color: var(--halcy-light);
+			  --calendar-js-link-color: var(--halcy-accent);
+			  --calendar-js-primary-button-color: var(--halcy-accent);
+			  --calendar-js-title-bar-button-color: var(--halcy-light);
+			  --calendar-js-title-bar-text-color: var(--halcy-light);
+			  --calendar-js-view-time-arrow-color: var(--halcy-accent);
+			  --calendar-js-event-left-border: 7px solid #b73716;
+			}
+
+			/* Tweak title bar to use Halcyonic textures */
+			div.calendar .title-bar {
+			  background: linear-gradient(180deg, var(--halcy-header), #2f3436) !important;
+			  color: var(--halcy-light) !important;
+			}
+
+			/* Make event boxes a bit more rounded to match site */
+			div.calendar .event, div.calendar-widget div.event {
+			  border-radius: 6px !important;
+			}
+
+			/* Accent for buttons/links inside calendar */
+			div.calendar a, div.calendar button { color: var(--halcy-accent) !important; }
+			</style>
 	</head>
 	<body class="subpage">
 		<div id="page-wrapper">
 
 			<!-- Header -->
-				<section id="header">
-							<div class="col-9 col-12-medium">
+			<section id="header">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
 
-								<!-- Main Content Placeholder: Typing Test -->
-								<!-- Logo -->
-								<h1><a href="../index.html" id="logo">Halcyonic</a></h1>
-											<h2>Calendar</h2>
-											<h3>A Calendar Page</h3>
-                                    <nav id="nav">
-                                        <a href="../index.html">Homepage</a>
-									</section>
+							<!-- Logo -->
+							<h1><a href="../index.html" id="logo"></a></h1>
 
-										<p>
-											
-										</p>
-										<p>
+							<!-- Nav -->
+							<nav id="nav">
+								<a href="../index.html">Homepage</a>
+								<a href="PhotoGallery.html">Photo Gallery</a>
+								<a href="TypeingTest.html">Typing Test</a>
+								<a href="Calander.html">Calander</a>
+								<a href="Weather.html">Weather</a>
+							</nav>
 
-										</p>
-									</section>
-
-							</div>
-							<div class="col-3 col-12-medium">
+						</div>
+					</div>
+				</div>
+			</section>
 
 
 		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+				<script src="assets/js/jquery.min.js"></script>
+				<script src="assets/js/browser.min.js"></script>
+				<script src="assets/js/breakpoints.min.js"></script>
+				<script src="assets/js/util.js"></script>
+				<script src="assets/js/main.js"></script>
+				<!-- Calendar.js scripts (from sibling Calander package) -->
+				<script src="../Calander/dist/calendar.min.js"></script>
+				<script>
+					// Initialize a basic calendar instance in the #calendar element
+					document.addEventListener('DOMContentLoaded', function () {
+						if (typeof calendarJs !== 'undefined') {
+							var cal = new calendarJs('calendar', {
+								view: 'month',
+								exportEventsEnabled: true,
+								useAmPmForTimeDisplays: true
+							});
+
+							// Add a couple of sample events
+							cal.addEvent({ from: new Date(), to: new Date(), title: 'Today', description: 'Sample event for today' });
+							var tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+							cal.addEvent({ from: tomorrow, to: tomorrow, title: 'Tomorrow', description: 'Another sample event' });
+						} else {
+							console.warn('calendarJs not found - check path to ../Calander/dist/calendar.min.js');
+						}
+					});
+				</script>
+
+				</div>
+				</section>
+
+				<!-- Content -->
+				<section id="content">
+					<div class="container">
+						<section>
+							<h2>Calendar</h2>
+							<p class="lead">A calendar view integrated with the Halcyonic theme.</p>
+							<div class="calendar-wrapper">
+								<div id="calendar"></div>
+							</div>
+						</section>
+					</div>
+				</section>
 
 	</body>
 </html>

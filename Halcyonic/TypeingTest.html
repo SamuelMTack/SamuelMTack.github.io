@@ -21,7 +21,7 @@
 							<div class="col-12">
 
 								<!-- Logo -->
-									<h1><a href="../index.html" id="logo">Halcyonic</a></h1>
+									<h1><a href="../index.html" id="logo"></a></h1>
 
 								<!-- Nav -->
 									<nav id="nav">
@@ -43,7 +43,125 @@
 												<h2>Typing Test</h2>
 												<h3>Practice your typing here</h3>
 											</header>
-											<p></p>
+											<div class="row">
+												<div class="col-8 col-12-medium">
+													<section>
+														<div class="typing-box">
+															<div id="prompt" class="prompt">Loading...</div>
+															<textarea id="input" placeholder="Start typing here..." rows="4"></textarea>
+															<div class="typing-controls">
+																<button id="startBtn" class="button">Start</button>
+																<button id="resetBtn" class="button">Reset</button>
+																<span id="timer">00:00</span>
+																<span id="wpm">WPM: 0</span>
+																<span id="acc">Accuracy: 100%</span>
+															</div>
+															<div id="result" class="typing-result" style="display:none;"></div>
+														</div>
+													</section>
+												</div>
+												<div class="col-4 col-12-medium">
+													<section>
+														<header><h3>Statistics & Tips</h3></header>
+														<p>Try to keep steady rhythm. Focus on accuracy first, speed will follow.</p>
+														<ul class="check-list">
+															<li>Use home row</li>
+															<li>Relax your shoulders</li>
+															<li>Look at the screen, not your hands</li>
+														</ul>
+													</section>
+												</div>
+											</div>
+
+											<script>
+					// Simple Typing Test script
+					(() => {
+						const prompts = [
+							'The quick brown fox jumps over the lazy dog.',
+							'Pack my box with five dozen liquor jugs.',
+							'Sphinx of black quartz, judge my vow.',
+							'How quickly daft jumping zebras vex.',
+							'Typing tests are a great way to improve accuracy and speed.'
+						];
+						const promptEl = document.getElementById('prompt');
+						const inputEl = document.getElementById('input');
+						const startBtn = document.getElementById('startBtn');
+						const resetBtn = document.getElementById('resetBtn');
+						const timerEl = document.getElementById('timer');
+						const wpmEl = document.getElementById('wpm');
+						const accEl = document.getElementById('acc');
+						const resultEl = document.getElementById('result');
+
+						let startTime = null;
+						let timerInterval = null;
+						let currentPrompt = '';
+
+						function pickPrompt(){
+							currentPrompt = prompts[Math.floor(Math.random()*prompts.length)];
+							promptEl.textContent = currentPrompt;
+						}
+
+						function updateTimer(){
+							if (!startTime) return;
+							const diff = Math.floor((Date.now()-startTime)/1000);
+							const mins = String(Math.floor(diff/60)).padStart(2,'0');
+							const secs = String(diff%60).padStart(2,'0');
+							timerEl.textContent = `${mins}:${secs}`;
+						}
+
+						function compute(){
+							const typed = inputEl.value;
+							const wordsTyped = typed.trim().split(/\s+/).filter(Boolean).length;
+							const timeMinutes = Math.max((Date.now()-startTime)/60000, 0.001);
+							const wpm = Math.round(wordsTyped / timeMinutes);
+							// accuracy: compare characters
+							let matches = 0;
+							const len = Math.max(typed.length, currentPrompt.length);
+							for (let i=0;i<Math.min(typed.length, currentPrompt.length);i++) if (typed[i]===currentPrompt[i]) matches++;
+							const accuracy = Math.round((matches / Math.max(currentPrompt.length,1)) * 100);
+							wpmEl.textContent = 'WPM: ' + wpm;
+							accEl.textContent = 'Accuracy: ' + accuracy + '%';
+							resultEl.style.display = 'block';
+							resultEl.innerHTML = `<strong>Result</strong><br/>WPM: ${wpm}<br/>Accuracy: ${accuracy}%`;
+						}
+
+						startBtn.addEventListener('click', ()=>{
+							pickPrompt();
+							inputEl.value = '';
+							inputEl.focus();
+							startTime = Date.now();
+							if (timerInterval) clearInterval(timerInterval);
+							timerInterval = setInterval(updateTimer,500);
+							resultEl.style.display='none';
+						});
+
+						resetBtn.addEventListener('click', ()=>{
+							if (timerInterval) clearInterval(timerInterval);
+							startTime = null;
+							timerEl.textContent = '00:00';
+							wpmEl.textContent = 'WPM: 0';
+							accEl.textContent = 'Accuracy: 100%';
+							inputEl.value = '';
+							promptEl.textContent = 'Click Start to load a new prompt.';
+							resultEl.style.display='none';
+						});
+
+						inputEl.addEventListener('input', ()=>{
+							if (!startTime) return;
+							// if user finished the prompt, compute and stop
+							if (inputEl.value.length >= currentPrompt.length) {
+								compute();
+								clearInterval(timerInterval);
+								startTime = null;
+							}
+						});
+
+						// initialize
+						promptEl.textContent = 'Click Start to load a new prompt.';
+						inputEl.value = '';
+					})();
+
+					</script>
 										</section>
 
 							</div>
