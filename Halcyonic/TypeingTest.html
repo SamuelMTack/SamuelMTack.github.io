@@ -10,6 +10,26 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<style>
+		/* Center the typing test content on the page and keep it responsive */
+		.main-typing-wrapper .row {
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+			gap: 2rem;
+		}
+		/* Columns: keep sensible max-widths so they don't become overly wide */
+		.main-typing-wrapper .col-8 { flex: 0 0 60%; max-width: 760px; }
+		.main-typing-wrapper .col-4 { flex: 0 0 28%; max-width: 360px; }
+		.typing-box { margin: 0 auto; max-width: 720px; }
+		/* Small screens: stack and stretch */
+		@media (max-width: 980px) {
+			.main-typing-wrapper .row { flex-direction: column; }
+			.main-typing-wrapper .col-8,
+			.main-typing-wrapper .col-4 { flex: 1 1 auto; max-width: none; }
+			.typing-box { width: 100%; }
+		}
+		</style>
 	</head>
 	<body class="subpage">
 		<div id="page-wrapper">
@@ -38,10 +58,10 @@
 				</section>
 
 								<!-- Main Content -->
-										<section>
+										<section class="main-typing-wrapper">
 											<header>
-												<h2>Typing Test</h2>
-												<h3>Practice your typing here</h3>
+												<h2> </h2>
+												<h3> </h3>
 											</header>
 											<div class="row">
 												<div class="col-8 col-12-medium">
