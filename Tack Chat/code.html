@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tack Chat | Local Ollama Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Add marked.js to render Markdown -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#0a0a0a",
+                        "on-surface": "#e5e5e5",
+                        "on-surface-variant": "#737373",
+                        "surface-container": "#141414",
+                        "surface-container-low": "#0f0f0f",
+                        "surface-container-high": "#1a1a1a",
+                        "primary": "#bac3ff",
+                        "primary-container": "#1e2340",
+                        "on-primary": "#08218a",
+                        "outline": "#404040",
+                        "outline-variant": "#262626",
+                        "secondary": "#a2e7ff"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #262626;
+            border-radius: 10px;
+        }
+        .kinetic-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 selection:text-primary min-h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden md:flex flex-col py-6 h-screen w-64 fixed left-0 top-0 border-r border-outline-variant bg-surface-container-low z-40">
+<!-- Branding -->
+<div class="px-6 mb-8 flex items-center gap-2 opacity-80 cursor-pointer" onclick="location.reload()">
+<span class="material-symbols-outlined text-primary text-xl" style='font-variation-settings: "FILL" 1;'>bolt</span>
+<h1 class="font-headline text-sm font-bold tracking-tight uppercase">Tack Chat</h1>
+</div>
+<!-- Primary Actions -->
+<div class="px-4 space-y-1">
+<button id="btn-new-chat" class="w-full flex items-center gap-3 py-2 px-3 rounded-lg bg-surface-container-high hover:bg-neutral-800 transition-all text-sm font-medium">
+<span class="material-symbols-outlined text-lg">edit_square</span>
+            New Chat
+        </button>
+<button id="btn-settings" class="w-full flex items-center gap-3 py-2 px-3 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-neutral-800 transition-all text-sm font-medium">
+<span class="material-symbols-outlined text-lg">settings</span>
+            Settings
+        </button>
+</div>
+<!-- History -->
+<nav class="flex-1 overflow-y-auto mt-8">
+<div class="px-6 mb-4">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Recent</p>
+</div>
+<div class="space-y-0.5">
+<a class="flex items-center gap-3 py-2 px-6 text-on-surface text-sm bg-surface-container-high/40 border-r-2 border-primary" href="#">
+<span class="truncate">Local Chat Session</span>
+</a>
+</div>
+</nav>
+</aside>
+
+<!-- Settings Modal -->
+<div id="settings-modal" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center backdrop-blur-sm">
+    <div class="bg-surface-container-high border border-outline rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl">
+        <h3 class="text-xl font-headline font-bold mb-4 text-on-surface">Configuration</h3>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm text-on-surface-variant mb-1">Ollama API URL (Ngrok or Localhost)</label>
+                <input id="settings-url" type="text" class="w-full bg-surface-container-low border border-outline rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="https://studies-ottawa-speech-bend.trycloudflare.com">
+                <p class="text-[10px] text-on-surface-variant mt-1">Make sure you launch Ollama with OLLAMA_ORIGINS="*" before starting ngrok so CORS isn't blocked.</p>
+            </div>
+            <div>
+                <label class="block text-sm text-on-surface-variant mb-1">Model Name</label>
+                <input id="settings-model" type="text" class="w-full bg-surface-container-low border border-outline rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="qwen3 4b">
+            </div>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-3 border-t border-outline/30 pt-4">
+            <button id="settings-close" class="px-4 py-2 text-sm text-on-surface-variant hover:text-on-surface transition-colors">Cancel</button>
+            <button id="settings-save" class="px-4 py-2 text-sm bg-primary text-on-primary rounded-lg font-medium hover:bg-primary/90 transition-colors">Save Details</button>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Stage -->
+<main class="flex-1 flex flex-col md:ml-64 h-screen relative bg-surface">
+<!-- Chat Header -->
+<header class="flex justify-between items-center w-full px-8 py-4 z-50">
+<div class="flex items-center gap-4">
+<div class="md:hidden">
+<span class="material-symbols-outlined">menu</span>
+</div>
+<h2 id="chat-title" class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">New Session</h2>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 py-1.5 px-3 rounded-full border border-outline-variant hover:bg-surface-container-high transition-all">
+<span class="text-[10px] font-bold uppercase tracking-wider">Share</span>
+</button>
+</div>
+</header>
+<!-- Chat Display -->
+<section id="scroll-container" class="flex-1 overflow-y-auto px-6 md:px-0 py-12 flex flex-col items-center">
+<div class="max-w-3xl w-full space-y-6 pb-48" id="chat-container">
+<!-- Welcome Header -->
+<div id="welcome-header" class="text-center py-20">
+<h3 class="font-headline text-4xl md:text-5xl font-medium tracking-tight text-on-surface mb-4">
+                    Tack Chat</h3>
+<p class="text-on-surface-variant text-base max-w-md mx-auto">
+                    Secure AI Chat with Local Ollama & Ngrok</p>
+</div>
+<!-- Chat Messages -->
+<div id="chat-messages" class="flex flex-col gap-6 w-full"></div>
+</div>
+</section>
+<!-- Minimal Input Area -->
+<div class="absolute bottom-0 left-0 right-0 p-8 flex justify-center pointer-events-none bg-gradient-to-t from-surface to-transparent pt-24">
+<div class="max-w-3xl w-full pointer-events-auto">
+<div class="bg-surface-container-high/90 kinetic-blur rounded-2xl p-2 border border-outline flex items-center shadow-2xl transition-all focus-within:border-primary/50 relative">
+<button class="w-10 h-10 rounded-xl flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors shrink-0">
+<span class="material-symbols-outlined">add</span>
+</button>
+<input id="chat-input" class="flex-1 bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-on-surface-variant/50 text-sm px-3 outline-none w-full" placeholder="Send a message" type="text" autocomplete="off"/>
+<div class="flex items-center gap-1 pr-1 shrink-0">
+<button class="w-10 h-10 rounded-xl flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors" title="Settings (Ollama Source)" onclick="document.getElementById('btn-settings').click()">
+<span class="material-symbols-outlined">api</span>
+</button>
+<button id="btn-send" class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all">
+<span class="material-symbols-outlined font-bold">arrow_upward</span>
+</button>
+</div>
+</div>
+<p class="text-center text-[9px] font-medium text-on-surface-variant/40 mt-4 uppercase tracking-[0.3em]">Tack Engine 4.0 - Local Processing</p>
+</div>
+</div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const chatInput = document.getElementById('chat-input');
+        const btnSend = document.getElementById('btn-send');
+        const chatMessages = document.getElementById('chat-messages');
+        const welcomeHeader = document.getElementById('welcome-header');
+        const scrollContainer = document.getElementById('scroll-container');
+        
+        // Settings elements
+        const btnSettings = document.getElementById('btn-settings');
+        const settingsModal = document.getElementById('settings-modal');
+        const settingsUrl = document.getElementById('settings-url');
+        const settingsModel = document.getElementById('settings-model');
+        const settingsClose = document.getElementById('settings-close');
+        const settingsSave = document.getElementById('settings-save');
+        const btnNewChat = document.getElementById('btn-new-chat');
+        
+        // State
+        let endpoint = localStorage.getItem('ollama_endpoint') || 'https://studies-ottawa-speech-bend.trycloudflare.com';
+        let modelStr = localStorage.getItem('ollama_model') || 'qwen3 4b';
+        let chatHistory = [];
+        let isGenerating = false;
+        
+        // Configure marked to sanitize and format correctly
+        if (typeof marked !== 'undefined') {
+            marked.setOptions({
+                breaks: true,
+                gfm: true,
+            });
+        }
+
+        // Settings Modal functionality
+        function openSettings() {
+            settingsUrl.value = endpoint;
+            settingsModel.value = modelStr;
+            settingsModal.classList.remove('hidden');
+        }
+        
+        function closeSettings() {
+            settingsModal.classList.add('hidden');
+        }
+        
+        function saveSettings() {
+            let userEndpoint = settingsUrl.value.trim();
+            if (userEndpoint.endsWith('/')) userEndpoint = userEndpoint.slice(0, -1);
+            endpoint = userEndpoint || 'https://studies-ottawa-speech-bend.trycloudflare.com';
+            modelStr = settingsModel.value.trim() || 'qwen3 4b';
+            
+            localStorage.setItem('ollama_endpoint', endpoint);
+            localStorage.setItem('ollama_model', modelStr);
+            closeSettings();
+        }
+        
+        btnSettings.addEventListener('click', openSettings);
+        settingsClose.addEventListener('click', closeSettings);
+        settingsSave.addEventListener('click', saveSettings);
+        
+        function scrollToBottom() {
+            setTimeout(() => {
+                scrollContainer.scrollTo({ top: scrollContainer.scrollHeight, behavior: 'smooth' });
+            }, 50);
+        }
+        
+        function createMessageElement(role, content) {
+            const wrapper = document.createElement('div');
+            wrapper.className = `flex w-full ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+            
+            const bubble = document.createElement('div');
+            
+            if (role === 'user') {
+                bubble.className = "max-w-[80%] rounded-2xl px-6 py-4 text-sm leading-relaxed bg-primary text-on-primary rounded-tr-sm";
+                bubble.textContent = content; 
+            } else {
+                bubble.className = "max-w-[85%] rounded-2xl px-6 py-4 text-sm leading-relaxed bg-surface-container-high text-on-surface border border-outline rounded-tl-sm prose prose-invert prose-p:my-2 prose-pre:bg-surface-container-low prose-pre:border prose-pre:border-outline prose-pre:p-4 prose-sm max-w-none break-words";
+                if (typeof marked !== 'undefined') {
+                    bubble.innerHTML = marked.parse(content);
+                } else {
+                    bubble.textContent = content;
+                }
+                
+                // Add styling to markdown links
+                const links = bubble.querySelectorAll('a');
+                links.forEach(l => l.classList.add('text-primary', 'underline', 'hover:opacity-80'));
+            }
+            
+            wrapper.appendChild(bubble);
+            return wrapper;
+        }
+
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text || isGenerating) return;
+            
+            isGenerating = true;
+            chatInput.value = '';
+            welcomeHeader.style.display = 'none';
+            
+            // Add User Message
+            chatMessages.appendChild(createMessageElement('user', text));
+            chatHistory.push({ role: 'user', content: text });
+            scrollToBottom();
+            
+            // Loading Indicator
+            const loadingWrapper = document.createElement('div');
+            loadingWrapper.className = "flex w-full justify-start";
+            loadingWrapper.innerHTML = `
+                <div class="rounded-2xl px-6 py-4 text-sm leading-relaxed bg-surface-container-high text-on-surface-variant border border-outline rounded-tl-sm flex items-center gap-2 animate-pulse">
+                    <span class="material-symbols-outlined text-sm animate-spin" style="animation: spin 1s linear infinite;">sync</span> Thinking...
+                </div>
+                <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+            `;
+            chatMessages.appendChild(loadingWrapper);
+            scrollToBottom();
+            
+            try {
+                // Remove history for simplicity or keep it if model supports it out of the box. 
+                // Ollama's /api/chat expects { role, content } pairs.
+                const response = await fetch(`${endpoint}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true' // Helpful for ngrok free tier
+                    },
+                    body: JSON.stringify({
+                        model: modelStr,
+                        messages: chatHistory,
+                        stream: false
+                    })
+                });
+                
+                loadingWrapper.remove();
+                
+                if (!response.ok) {
+                    throw new Error(`Server returned status ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const assistantMsg = data.message?.content || "Sorry, I couldn't respond correctly.";
+                
+                chatHistory.push({ role: 'assistant', content: assistantMsg });
+                chatMessages.appendChild(createMessageElement('assistant', assistantMsg));
+                
+            } catch (err) {
+                loadingWrapper.remove();
+                const errorMsg = `**Error communicating with Ollama.**\n\nEnsure that:\n1. Your URL is correct in Settings.\n2. Local Ollama is running.\n3. CORS headers are allowed \`(OLLAMA_ORIGINS="*")\`.\n\n\`Details: ${err.message}\``;
+                chatMessages.appendChild(createMessageElement('assistant', errorMsg));
+                chatHistory.push({ role: 'assistant', content: errorMsg });
+            }
+            
+            scrollToBottom();
+            isGenerating = false;
+        }
+        
+        btnSend.addEventListener('click', sendMessage);
+        
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        btnNewChat.addEventListener('click', () => {
+            chatHistory = [];
+            chatMessages.innerHTML = '';
+            welcomeHeader.style.display = 'block';
+            document.getElementById('chat-title').textContent = 'New Session';
+        });
+    });
+</script>
+</body>
+</html>
