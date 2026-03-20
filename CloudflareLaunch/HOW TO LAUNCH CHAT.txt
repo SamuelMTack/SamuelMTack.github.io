@@ -1,0 +1,10 @@
+Cloud Flare URL
+
+https://studies-ottawa-speech-bend.trycloudflare.com
+
+
+Launch the Powershell and run the Scripts
+
+What to run: Open PowerShell or Command prompt where you downloaded it and type:
+
+C:\Users\samue\Documents\GitHub\SamuelMTack.github.io\CloudflareLaunch\cloudflared-windows-amd64.exe tunnel --url http://127.0.0.1:11434
