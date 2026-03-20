@@ -103,7 +103,7 @@
             </div>
             <div>
                 <label class="block text-sm text-on-surface-variant mb-1">Model Name</label>
-                <input id="settings-model" type="text" class="w-full bg-surface-container-low border border-outline rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="qwen3 4b">
+                <input id="settings-model" type="text" class="w-full bg-surface-container-low border border-outline rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="qwen3:4b">
             </div>
         </div>
 
@@ -185,7 +185,7 @@
         
         // State
         let endpoint = localStorage.getItem('ollama_endpoint') || 'https://studies-ottawa-speech-bend.trycloudflare.com';
-        let modelStr = localStorage.getItem('ollama_model') || 'qwen3 4b';
+        let modelStr = localStorage.getItem('ollama_model') || 'qwen3:4b';
         let chatHistory = [];
         let isGenerating = false;
         
@@ -212,7 +212,7 @@
             let userEndpoint = settingsUrl.value.trim();
             if (userEndpoint.endsWith('/')) userEndpoint = userEndpoint.slice(0, -1);
             endpoint = userEndpoint || 'https://studies-ottawa-speech-bend.trycloudflare.com';
-            modelStr = settingsModel.value.trim() || 'qwen3 4b';
+            modelStr = settingsModel.value.trim() || 'qwen3:4b';
             
             localStorage.setItem('ollama_endpoint', endpoint);
             localStorage.setItem('ollama_model', modelStr);
@@ -298,7 +298,12 @@
                 loadingWrapper.remove();
                 
                 if (!response.ok) {
-                    throw new Error(`Server returned status ${response.status}`);
+                    let errMsg = `Server returned status ${response.status}`;
+                    try {
+                        const errData = await response.json();
+                        if (errData.error) errMsg += ` (${errData.error})`;
+                    } catch(e) {}
+                    throw new Error(errMsg);
                 }
                 
                 const data = await response.json();
