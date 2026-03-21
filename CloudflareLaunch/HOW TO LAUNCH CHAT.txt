@@ -3,7 +3,9 @@ C:\Users\samue\Documents\GitHub\SamuelMTack.github.io\CloudflareLaunch\cloudflar
 Turn on Ollama.
 
 Start the App and Launch Powershell Command
-Ollama serve
+
+$env:OLLAMA_ORIGINS="*"
+ollama serve
 
 Run your cloudflared tunnel command.
 
