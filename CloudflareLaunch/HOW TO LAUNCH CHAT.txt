@@ -1,10 +1,16 @@
-Cloud Flare URL
+C:\Users\samue\Documents\GitHub\SamuelMTack.github.io\CloudflareLaunch\cloudflared-windows-amd64.exe tunnel --url http://127.0.0.1:11434
 
-https://ace-cheap-winds-necessary.trycloudflare.com
+Turn on Ollama.
 
+Start the App and Launch Powershell Command
+Ollama serve
 
-Launch the Powershell and run the Scripts
-
-What to run: Open PowerShell or Command prompt where you downloaded it and type:
+Run your cloudflared tunnel command.
 
 C:\Users\samue\Documents\GitHub\SamuelMTack.github.io\CloudflareLaunch\cloudflared-windows-amd64.exe tunnel --url http://127.0.0.1:11434
+
+Open Tack Chat, paste your new url into Settings.
+
+URL - will be in the Cloud Flare CMD
+
+Try chatting!
