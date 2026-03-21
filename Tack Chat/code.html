@@ -183,8 +183,12 @@
         const settingsSave = document.getElementById('settings-save');
         const btnNewChat = document.getElementById('btn-new-chat');
         
-        // State
-        let endpoint = localStorage.getItem('ollama_endpoint') || 'https://ace-cheap-winds-necessary.trycloudflare.com';
+        let defaultEndpoint = 'https://ace-cheap-winds-necessary.trycloudflare.com';
+        let savedEndpoint = localStorage.getItem('ollama_endpoint');
+        // Automatically override stale trycloudflare URLs from previous sessions
+        let endpoint = (savedEndpoint && savedEndpoint.includes('trycloudflare.com') && savedEndpoint !== defaultEndpoint)
+            ? defaultEndpoint
+            : (savedEndpoint || defaultEndpoint);
         let modelStr = localStorage.getItem('ollama_model') || 'qwen3:4b';
         let chatHistory = [];
         let isGenerating = false;
