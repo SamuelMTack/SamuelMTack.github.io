@@ -98,7 +98,7 @@
         <div class="space-y-4">
             <div>
                 <label class="block text-sm text-on-surface-variant mb-1">Ollama API URL (Ngrok or Localhost)</label>
-                <input id="settings-url" type="text" class="w-full bg-surface-container-low border border-outline rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="https://ryan-teams-sublime-theme.trycloudflare.com">
+                <input id="settings-url" type="text" class="w-full bg-surface-container-low border border-outline rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="https://validity-interval-zum-left.trycloudflare.com">
                 <p class="text-[10px] text-on-surface-variant mt-1">Make sure you launch Ollama with OLLAMA_ORIGINS="*" before starting ngrok so CORS isn't blocked.</p>
             </div>
             <div>
@@ -183,12 +183,23 @@
         const settingsSave = document.getElementById('settings-save');
         const btnNewChat = document.getElementById('btn-new-chat');
         
-        let defaultEndpoint = 'https://ryan-teams-sublime-theme.trycloudflare.com';
+        let defaultEndpoint = 'https://validity-interval-zum-left.trycloudflare.com';
+        
+        // 1. Check if the URL provides a tunnel (e.g., code.html?tunnel=https://abc.trycloudflare.com)
+        const params = new URLSearchParams(window.location.search);
+        const tunnelParam = params.get('tunnel');
+        
+        if (tunnelParam) {
+            localStorage.setItem('ollama_endpoint', tunnelParam); // Save it explicitly
+            window.history.replaceState({}, document.title, window.location.pathname); // Clean URL bar
+        }
+
+        // 2. Load what is currently saved
         let savedEndpoint = localStorage.getItem('ollama_endpoint');
-        // Automatically override stale trycloudflare URLs from previous sessions
-        let endpoint = (savedEndpoint && savedEndpoint.includes('trycloudflare.com') && savedEndpoint !== defaultEndpoint)
-            ? defaultEndpoint
-            : (savedEndpoint || defaultEndpoint);
+        
+        // 3. Determine final endpoint
+        let endpoint = savedEndpoint || defaultEndpoint;
+        
         let modelStr = localStorage.getItem('ollama_model') || 'qwen3:4b';
         let chatHistory = [];
         let isGenerating = false;
@@ -215,7 +226,7 @@
         function saveSettings() {
             let userEndpoint = settingsUrl.value.trim();
             if (userEndpoint.endsWith('/')) userEndpoint = userEndpoint.slice(0, -1);
-            endpoint = userEndpoint || 'https://ryan-teams-sublime-theme.trycloudflare.com';
+            endpoint = userEndpoint || 'https://validity-interval-zum-left.trycloudflare.com';
             modelStr = settingsModel.value.trim() || 'qwen3:4b';
             
             localStorage.setItem('ollama_endpoint', endpoint);

@@ -1,18 +1,30 @@
-C:\Users\samue\Documents\GitHub\SamuelMTack.github.io\CloudflareLaunch\cloudflared-windows-amd64.exe tunnel --url http://127.0.0.1:11434
+# HOW TO LAUNCH CHAT
 
-Turn on Ollama.
 
-Start the App and Launch Powershell Command
+Right-click 
 
+Start-Ollama.ps1
+ -> "Run with PowerShell".
+Right-click 
+
+Launch-TackChat.ps1
+ -> "Run with PowerShell".
+
+
+
+
+
+1. Turn on Ollama with the correct environment variables (to fix "403 Forbidden" & CORS errors).
+Open PowerShell and run:
+$env:OLLAMA_HOST="0.0.0.0"
 $env:OLLAMA_ORIGINS="*"
 ollama serve
 
-Run your cloudflared tunnel command.
+2. Run your Cloudflared tunnel command in a new PowerShell window:
+C:\Users\samue\Documents\GitHub\SamuelMTack.github.io\CloudflareLaunch\cloudflared-windows-amd64.exe tunnel --url http://127.0.0.1:11434 --http-host-header localhost
 
-C:\Users\samue\Documents\GitHub\SamuelMTack.github.io\CloudflareLaunch\cloudflared-windows-amd64.exe tunnel --url http://127.0.0.1:11434
+3. Wait for the Cloudflare CMD to output your temporary URL (e.g. https://something.trycloudflare.com).
 
-Open Tack Chat, paste your new url into Settings.
+4. Open Tack Chat (`code.html`). If it doesn't automatically detect your new URL, paste your new URL into Settings.
 
-URL - will be in the Cloud Flare CMD
-
-Try chatting!
+5. Refresh the page to bypass the Cloudflare warning (if applicable) and try chatting!
