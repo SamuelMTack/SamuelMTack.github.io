@@ -98,7 +98,7 @@
         <div class="space-y-4">
             <div>
                 <label class="block text-sm text-on-surface-variant mb-1">Ollama API URL (Ngrok or Localhost)</label>
-                <input id="settings-url" type="text" class="w-full bg-surface-container-low border border-outline rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="https://studies-ottawa-speech-bend.trycloudflare.com">
+                <input id="settings-url" type="text" class="w-full bg-surface-container-low border border-outline rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="https://ace-cheap-winds-necessary.trycloudflare.com">
                 <p class="text-[10px] text-on-surface-variant mt-1">Make sure you launch Ollama with OLLAMA_ORIGINS="*" before starting ngrok so CORS isn't blocked.</p>
             </div>
             <div>
@@ -184,7 +184,7 @@
         const btnNewChat = document.getElementById('btn-new-chat');
         
         // State
-        let endpoint = localStorage.getItem('ollama_endpoint') || 'https://studies-ottawa-speech-bend.trycloudflare.com';
+        let endpoint = localStorage.getItem('ollama_endpoint') || 'https://ace-cheap-winds-necessary.trycloudflare.com';
         let modelStr = localStorage.getItem('ollama_model') || 'qwen3:4b';
         let chatHistory = [];
         let isGenerating = false;
@@ -211,7 +211,7 @@
         function saveSettings() {
             let userEndpoint = settingsUrl.value.trim();
             if (userEndpoint.endsWith('/')) userEndpoint = userEndpoint.slice(0, -1);
-            endpoint = userEndpoint || 'https://studies-ottawa-speech-bend.trycloudflare.com';
+            endpoint = userEndpoint || 'https://ace-cheap-winds-necessary.trycloudflare.com';
             modelStr = settingsModel.value.trim() || 'qwen3:4b';
             
             localStorage.setItem('ollama_endpoint', endpoint);

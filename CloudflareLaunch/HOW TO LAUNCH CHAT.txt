@@ -1,6 +1,6 @@
 Cloud Flare URL
 
-https://studies-ottawa-speech-bend.trycloudflare.com
+https://ace-cheap-winds-necessary.trycloudflare.com
 
 
 Launch the Powershell and run the Scripts
