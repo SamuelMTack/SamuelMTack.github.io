@@ -86,6 +86,7 @@
                     <li><a href="#contact">Contact</a></li>
                     <li><a href="#game">Games</a></li>
                     <li><a href="Tack%20Chat/code.html" target="_blank" rel="noopener">AI Chat</a></li>
+                    <li><a href="#filestorage">File Storage</a></li>
                 </ul>
             </nav>
         </header>
@@ -551,11 +552,212 @@
                 </div>
             </article>
 
+            <!-- Article: File Storage -->
+            <article id="filestorage">
+                <h2 class="major">File Storage</h2>
+                <div class="card">
+                    <p>Integrate directly with Google Drive to upload, view, and download your files.</p>
+                    
+                    <!-- Configuration -->
+                    <div style="margin-bottom: 2rem; padding: 1rem; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px;">
+                        <label for="gdrive-api-key" style="display:block; margin-bottom:0.5rem; font-weight:bold;">Google Drive API Key / OAuth Token:</label>
+                        <p style="font-size: 0.85em; margin-bottom: 0.5rem; color: #ccc;">Note: Uploading files requires an OAuth 2.0 Access Token. An API Key can only read public files.</p>
+                        <input type="password" id="gdrive-api-key" placeholder="Enter API Key or Token here..." style="width: 100%; margin-bottom: 0.5rem; background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.6rem; border-radius: 4px;" />
+                        <div style="font-size: 0.8rem; color: #888;">Your key/token is only used locally in your browser.</div>
+                    </div>
+                    
+                    <!-- Upload Section -->
+                    <div style="margin-bottom: 2rem; padding: 1rem; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px;">
+                        <h3 style="margin-bottom: 1rem;">Upload File</h3>
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <input type="file" id="gdrive-file-input" style="flex: 1; max-width: 100%; border: 1px dashed rgba(255, 255, 255, 0.2); padding: 1rem; border-radius: 4px; background: rgba(0,0,0,0.2); color: #fff;" />
+                            <button id="gdrive-upload-btn" class="button primary">Upload</button>
+                        </div>
+                        <div id="upload-status" style="margin-top: 1rem; font-size: 0.9em; font-weight: 500;"></div>
+                    </div>
 
+                    <!-- Available Files Section -->
+                    <div style="padding: 1rem; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="margin: 0;">Available Files</h3>
+                            <button id="gdrive-refresh-btn" class="button small">Refresh List</button>
+                        </div>
+                        <ul id="gdrive-file-list" style="list-style: none; padding: 0; margin: 0; max-height: 300px; overflow-y: auto;">
+                            <li style="padding: 1rem; text-align: center; color: #888; border: 1px dashed rgba(255,255,255,0.1); border-radius: 4px;">Provide your API Key/Token and tap Refresh.</li>
+                        </ul>
+                    </div>
+                </div>
 
+                <script>
+                    (function() {
+                        const fileInput = document.getElementById('gdrive-file-input');
+                        const apiKeyInput = document.getElementById('gdrive-api-key');
+                        const uploadBtn = document.getElementById('gdrive-upload-btn');
+                        const refreshBtn = document.getElementById('gdrive-refresh-btn');
+                        const statusEl = document.getElementById('upload-status');
+                        const listEl = document.getElementById('gdrive-file-list');
 
+                        if (localStorage.getItem('gdriveApiKey')) {
+                            apiKeyInput.value = localStorage.getItem('gdriveApiKey');
+                        }
+                        apiKeyInput.addEventListener('change', () => {
+                            localStorage.setItem('gdriveApiKey', apiKeyInput.value);
+                        });
 
+                        function getHeadersAndUrl(baseUrl, isUpload = false) {
+                            const apiKey = apiKeyInput.value.trim();
+                            // Simple heuristic: Google OAuth tokens usually start with ya29 or are generally longer than simple API keys
+                            const isToken = apiKey.startsWith('ya29.') || apiKey.length > 40;
+                            
+                            let url = baseUrl;
+                            let headers = {};
+                            
+                            if (isToken) {
+                                headers['Authorization'] = 'Bearer ' + apiKey;
+                            } else {
+                                url += (url.includes('?') ? '&' : '?') + 'key=' + apiKey;
+                            }
+                            return { url, headers };
+                        }
 
+                        async function uploadFile() {
+                            const apiKey = apiKeyInput.value.trim();
+                            if (!apiKey) {
+                                statusEl.textContent = '❌ Please enter your API Key or OAuth Token.';
+                                statusEl.style.color = '#ef4444';
+                                return;
+                            }
+                            if (!fileInput.files.length) {
+                                statusEl.textContent = '❌ Please select a file to upload.';
+                                statusEl.style.color = '#ef4444';
+                                return;
+                            }
+
+                            const file = fileInput.files[0];
+                            const metadata = { 
+                                name: file.name,
+                                parents: ['16lcYIfoXRKMbnakYBBdGi-5DO0Re-DuB']
+                            };
+
+                            const form = new FormData();
+                            form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+                            form.append('file', file);
+
+                            statusEl.textContent = '⏳ Uploading to Google Drive...';
+                            statusEl.style.color = '#eab308';
+                            uploadBtn.disabled = true;
+
+                            const { url, headers } = getHeadersAndUrl('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', true);
+
+                            try {
+                                const response = await fetch(url, {
+                                    method: 'POST',
+                                    headers: headers,
+                                    body: form
+                                });
+                                
+                                const result = await response.json();
+                                if (response.ok) {
+                                    statusEl.textContent = '✅ Upload successful!';
+                                    statusEl.style.color = '#10b981';
+                                    fileInput.value = ''; 
+                                    listFiles(); 
+                                } else {
+                                    statusEl.textContent = '❌ Upload failed: ' + (result.error && result.error.message ? result.error.message : 'Unknown error');
+                                    statusEl.style.color = '#ef4444';
+                                }
+                            } catch (err) {
+                                statusEl.textContent = '❌ Error: ' + err.message;
+                                statusEl.style.color = '#ef4444';
+                            } finally {
+                                uploadBtn.disabled = false;
+                            }
+                        }
+
+                        async function listFiles() {
+                            const apiKey = apiKeyInput.value.trim();
+                            if (!apiKey) {
+                                listEl.innerHTML = '<li style="padding: 1rem; text-align: center; color: #ef4444; background: rgba(239, 68, 68, 0.1); border-radius: 4px;">Please enter your API Key or Token first.</li>';
+                                return;
+                            }
+
+                            listEl.innerHTML = '<li style="padding: 1rem; text-align: center; color: #eab308;">Loading files...</li>';
+                            refreshBtn.disabled = true;
+
+                            const folderId = '16lcYIfoXRKMbnakYBBdGi-5DO0Re-DuB';
+                            const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
+                            const { url, headers } = getHeadersAndUrl(`https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,name,mimeType,webContentLink,webViewLink)&pageSize=20&orderBy=modifiedTime desc`);
+
+                            try {
+                                const response = await fetch(url, { method: 'GET', headers: headers });
+                                const result = await response.json();
+                                
+                                if (response.ok) {
+                                    listEl.innerHTML = '';
+                                    if (result.files && result.files.length > 0) {
+                                        result.files.forEach(file => {
+                                            const li = document.createElement('li');
+                                            li.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s;';
+                                            li.onmouseover = () => li.style.background = 'rgba(255,255,255,0.02)';
+                                            li.onmouseout = () => li.style.background = 'transparent';
+                                            
+                                            let icon = '📄';
+                                            if (file.mimeType.includes('image')) icon = '🖼️';
+                                            else if (file.mimeType.includes('folder')) icon = '📁';
+                                            else if (file.mimeType.includes('video')) icon = '🎥';
+                                            
+                                            const nameSpan = document.createElement('div');
+                                            nameSpan.style.cssText = 'flex: 1; display: flex; align-items: center; gap: 10px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding-right: 15px;';
+                                            nameSpan.innerHTML = '<span style="font-size: 1.2em;">' + icon + '</span> <span style="overflow: hidden; text-overflow: ellipsis;" title="' + file.name + '">' + file.name + '</span>';
+                                            
+                                            const actionsDiv = document.createElement('div');
+                                            actionsDiv.style.display = 'flex';
+                                            actionsDiv.style.gap = '8px';
+                                            
+                                            // View Link if available
+                                            if (file.webViewLink) {
+                                                const viewBtn = document.createElement('a');
+                                                viewBtn.href = file.webViewLink;
+                                                viewBtn.target = '_blank';
+                                                viewBtn.className = 'button small alt';
+                                                viewBtn.textContent = 'View';
+                                                viewBtn.style.padding = '0 0.8rem';
+                                                actionsDiv.appendChild(viewBtn);
+                                            }
+                                            
+                                            // Download link if available
+                                            if (file.webContentLink) {
+                                                const dlBtn = document.createElement('a');
+                                                dlBtn.href = file.webContentLink;
+                                                dlBtn.target = '_blank';
+                                                dlBtn.className = 'button small';
+                                                dlBtn.textContent = 'Download';
+                                                dlBtn.style.padding = '0 0.8rem';
+                                                actionsDiv.appendChild(dlBtn);
+                                            }
+                                            
+                                            li.appendChild(nameSpan);
+                                            li.appendChild(actionsDiv);
+                                            listEl.appendChild(li);
+                                        });
+                                    } else {
+                                        listEl.innerHTML = '<li style="padding: 1rem; text-align: center; color: #888; border: 1px dashed rgba(255,255,255,0.1); border-radius: 4px;">No files found in this Drive.</li>';
+                                    }
+                                } else {
+                                    listEl.innerHTML = '<li style="padding: 1rem; color: #ef4444; background: rgba(239, 68, 68, 0.1); border-radius: 4px;">Error loading files: ' + (result.error && result.error.message ? result.error.message : 'Unknown error') + '</li>';
+                                }
+                            } catch (err) {
+                                listEl.innerHTML = '<li style="padding: 1rem; color: #ef4444; background: rgba(239, 68, 68, 0.1); border-radius: 4px;">Error: ' + err.message + '</li>';
+                            } finally {
+                                refreshBtn.disabled = false;
+                            }
+                        }
+
+                        uploadBtn.addEventListener('click', uploadFile);
+                        refreshBtn.addEventListener('click', listFiles);
+                    })();
+                </script>
+            </article>
 
         </div> <!-- /#main -->
 
