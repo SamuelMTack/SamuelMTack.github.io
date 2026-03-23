@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #060e20;
+            color: #dee5ff;
+        }
+        /* Custom scrollbar for the monolith feel */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060e20;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00225a;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-surface": "#dee5ff",
+                "surface-tint": "#b9c8de",
+                "on-tertiary-container": "#495468",
+                "primary-fixed": "#d4e4fa",
+                "surface-container-lowest": "#000000",
+                "secondary": "#909fb5",
+                "on-primary": "#334153",
+                "on-primary-fixed-variant": "#4e5d6f",
+                "on-tertiary-fixed": "#374155",
+                "on-secondary-container": "#b2c0d8",
+                "error": "#ee7d77",
+                "on-tertiary-fixed-variant": "#535e72",
+                "error-dim": "#bb5551",
+                "tertiary-fixed-dim": "#ccd7ef",
+                "on-background": "#dee5ff",
+                "on-secondary-fixed": "#324053",
+                "primary-container": "#39485a",
+                "on-error-container": "#ff9993",
+                "secondary-container": "#2e3c4f",
+                "on-tertiary": "#515c70",
+                "surface": "#060e20",
+                "on-secondary": "#122133",
+                "on-secondary-fixed-variant": "#4e5c71",
+                "on-error": "#490106",
+                "outline": "#5b74b1",
+                "tertiary-container": "#dae6fe",
+                "inverse-surface": "#faf8ff",
+                "surface-variant": "#00225a",
+                "secondary-fixed": "#d5e3fc",
+                "on-primary-container": "#c2d2e8",
+                "inverse-on-surface": "#4d556b",
+                "primary": "#b9c8de",
+                "on-primary-fixed": "#324052",
+                "surface-bright": "#002867",
+                "tertiary": "#f0f3ff",
+                "secondary-dim": "#909fb5",
+                "surface-dim": "#060e20",
+                "surface-container-high": "#031d4b",
+                "background": "#060e20",
+                "surface-container": "#05183c",
+                "surface-container-highest": "#00225a",
+                "tertiary-dim": "#ccd7ef",
+                "tertiary-fixed": "#dae6fe",
+                "primary-fixed-dim": "#c6d6ec",
+                "error-container": "#7f2927",
+                "inverse-primary": "#526073",
+                "surface-container-low": "#06122d",
+                "primary-dim": "#abbad0",
+                "on-surface-variant": "#91aaeb",
+                "secondary-fixed-dim": "#c7d5ed",
+                "outline-variant": "#2b4680"
+              },
+              fontFamily: {
+                "headline": ["Inter"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex">
+<!-- SideNavBar (Authority: JSON & Design System) -->
+<aside class="h-screen w-64 fixed left-0 top-0 flex flex-col bg-surface-container-low font-['Inter'] text-sm font-medium z-40">
+<div class="flex flex-col p-6 space-y-2 h-full">
+<div class="mb-8">
+<h1 class="text-xl font-black text-on-surface tracking-tighter">Digital Monolith</h1>
+<p class="text-xs text-on-surface-variant opacity-70">Premium Storage</p>
+</div>
+<!-- CTA Upload -->
+<button class="w-full py-3 mb-6 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all duration-300">
+<span class="material-symbols-outlined text-sm">add</span>
+                Upload
+            </button>
+<nav class="flex-1 space-y-1">
+<!-- My Files is active based on the primary intent of the storage UI -->
+<a class="flex items-center gap-3 px-4 py-3 bg-surface-variant text-on-surface rounded-lg transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="folder" style="font-variation-settings: 'FILL' 1;">folder</span>
+                    My Files
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                    Shared
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+                    Recent
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="grade">grade</span>
+                    Starred
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+                    Trash
+                </a>
+</nav>
+<div class="pt-6 border-t border-outline-variant/10 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="cloud_queue">cloud_queue</span>
+                    Storage usage
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                    Logout
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="flex-1 ml-64 min-h-screen flex flex-col">
+<!-- TopNavBar (Authority: JSON & Design System) -->
+<header class="w-full h-16 flex items-center justify-between sticky top-0 z-50 px-8 bg-surface font-['Inter'] text-sm tracking-tight">
+<div class="flex items-center gap-8 w-full">
+<span class="text-lg font-bold tracking-tighter text-on-surface">Slate Archive</span>
+<!-- Search Bar on left -->
+<div class="relative max-w-xl w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+<input class="w-full bg-surface-container-highest border-none rounded-sm py-2 pl-10 pr-4 text-on-surface focus:ring-1 focus:ring-outline/40 placeholder:text-on-surface-variant/50 transition-all" placeholder="Search archive..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface transition-colors" data-icon="help_outline">help_outline</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface transition-colors" data-icon="settings">settings</button>
+</div>
+<div class="h-8 w-8 rounded-full bg-surface-bright overflow-hidden ring-2 ring-outline-variant/20">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Portrait of a professional user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtpUlSlXvbjPbyjVv-6Yi3aNXhXPMUQTX9M2FYY9G4kQEkgCt5k9IatviNYL5WVbH4ReiG7zQGzcvGRRh0VtNFCDMHaGEwC9JZQTpJWEhXPpCd22spgMc7UqmWJ3Z-SEyfTLio0Q41Xbx5dEINx0BfmP4K_dMe9lz7aCLqTDNlHh7qEOGxc9uCq0iiw4TW6sVNZMBWVv_OOk6MN9NGj1xZnYTtGtV3cOinkk73ifkYlhP4KHpMQSW7_soItqMdxaphRYAwSig5Ix0"/>
+</div>
+</div>
+</header>
+<!-- Page Content Canvas -->
+<div class="px-12 py-10 space-y-12 max-w-7xl mx-auto w-full">
+<!-- Hero Storage Summary -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-8 items-end">
+<div class="md:col-span-2 space-y-6">
+<h2 class="text-6xl font-headline font-bold tracking-tight text-on-surface">75% Full</h2>
+<p class="text-on-surface-variant max-w-md">Your monolith contains 1.5TB of architectural data artifacts. Storage expansion available via enterprise tier.</p>
+<!-- Storage Prism -->
+<div class="space-y-2">
+<div class="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/4 shadow-[0_0_8px_rgba(185,200,222,0.6)]"></div>
+</div>
+<div class="flex justify-between text-[10px] font-medium uppercase tracking-widest text-on-surface-variant/60">
+<span>0 GB Used</span>
+<span>2.0 TB Total Capacity</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">System Status</span>
+<span class="h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+</div>
+<div class="space-y-1">
+<div class="text-2xl font-bold">Encrypted</div>
+<div class="text-xs text-on-surface-variant">AES-256 Bit Protocol Active</div>
+</div>
+</div>
+</section>
+<!-- Categorized Folders (Bento Style) -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="md:col-span-2 bg-surface-container-low hover:bg-surface-bright/20 transition-all duration-300 p-8 rounded-xl flex flex-col justify-between min-h-[200px] cursor-pointer group">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="description">description</span>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="arrow_outward">arrow_outward</span>
+</div>
+<div>
+<h3 class="text-xl font-bold">Documents</h3>
+<p class="text-sm text-on-surface-variant">4,204 Artifacts • 120 GB</p>
+</div>
+</div>
+<div class="bg-surface-container-low hover:bg-surface-bright/20 transition-all duration-300 p-8 rounded-xl flex flex-col justify-between min-h-[200px] cursor-pointer group">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant" data-icon="image">image</span>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="arrow_outward">arrow_outward</span>
+</div>
+<div>
+<h3 class="text-xl font-bold">Images</h3>
+<p class="text-sm text-on-surface-variant">12,890 Files • 450 GB</p>
+</div>
+</div>
+<div class="bg-surface-container-low hover:bg-surface-bright/20 transition-all duration-300 p-8 rounded-xl flex flex-col justify-between min-h-[200px] cursor-pointer group">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant" data-icon="movie">movie</span>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="arrow_outward">arrow_outward</span>
+</div>
+<div>
+<h3 class="text-xl font-bold">Videos</h3>
+<p class="text-sm text-on-surface-variant">842 Clips • 930 GB</p>
+</div>
+</div>
+</section>
+<!-- Recent Files Table -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h2 class="text-2xl font-bold tracking-tight">Recent Archives</h2>
+<button class="text-sm font-medium text-primary hover:underline underline-offset-4">View Directory</button>
+</div>
+<div class="bg-surface-container-low rounded-xl overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant/60 border-b border-outline-variant/10">
+<th class="px-8 py-4">Artifact Name</th>
+<th class="px-8 py-4">Modified</th>
+<th class="px-8 py-4">Classification</th>
+<th class="px-8 py-4 text-right">Size</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<tr class="group hover:bg-surface-bright/10 transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 bg-surface-container-highest rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="article">article</span>
+</div>
+<span class="font-bold text-on-surface tracking-tight">Q4 Financial Report</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant">Oct 24, 2023</td>
+<td class="px-8 py-5">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-wider rounded-full">Financial</span>
+</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant text-right">12.4 MB</td>
+</tr>
+<tr class="group hover:bg-surface-bright/10 transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 bg-surface-container-highest rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="play_circle">play_circle</span>
+</div>
+<span class="font-bold text-on-surface tracking-tight">Project Alpha Demo</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant">Oct 22, 2023</td>
+<td class="px-8 py-5">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-wider rounded-full">Internal</span>
+</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant text-right">1.2 GB</td>
+</tr>
+<tr class="group hover:bg-surface-bright/10 transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 bg-surface-container-highest rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="palette">palette</span>
+</div>
+<span class="font-bold text-on-surface tracking-tight">Brand Identity</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant">Oct 20, 2023</td>
+<td class="px-8 py-5">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-wider rounded-full">Marketing</span>
+</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant text-right">85.0 MB</td>
+</tr>
+<tr class="group hover:bg-surface-bright/10 transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 bg-surface-container-highest rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="person">person</span>
+</div>
+<span class="font-bold text-on-surface tracking-tight">Customer List</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant">Oct 18, 2023</td>
+<td class="px-8 py-5">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-wider rounded-full">Confidential</span>
+</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant text-right">4.1 MB</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</body></html>

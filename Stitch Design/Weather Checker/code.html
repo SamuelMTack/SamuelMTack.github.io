@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Atmospheric | Weather Observer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@300;400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-tertiary-fixed": "#003150",
+                "surface-container-low": "#131313",
+                "primary-fixed-dim": "#d4d4d4",
+                "tertiary-fixed-dim": "#91c0ef",
+                "tertiary-fixed": "#9fcefe",
+                "tertiary-dim": "#91c0ef",
+                "error-dim": "#bb5551",
+                "surface-tint": "#c6c6c7",
+                "on-primary": "#3f4041",
+                "primary": "#c6c6c7",
+                "surface-container": "#191a1a",
+                "surface-container-highest": "#252626",
+                "error": "#ee7d77",
+                "on-surface": "#e7e5e5",
+                "secondary-fixed-dim": "#d6d4d3",
+                "secondary-dim": "#9f9d9d",
+                "secondary-fixed": "#e4e2e1",
+                "background": "#0e0e0e",
+                "error-container": "#7f2927",
+                "tertiary": "#b9dbff",
+                "primary-dim": "#b8b9b9",
+                "surface": "#0e0e0e",
+                "on-tertiary-fixed-variant": "#174e77",
+                "surface-variant": "#252626",
+                "inverse-primary": "#5e5f60",
+                "inverse-surface": "#fcf9f8",
+                "on-secondary-container": "#c1bfbe",
+                "surface-container-high": "#1f2020",
+                "on-tertiary": "#174e77",
+                "on-surface-variant": "#acabaa",
+                "on-tertiary-container": "#07456e",
+                "on-background": "#e7e5e5",
+                "outline-variant": "#484848",
+                "surface-dim": "#0e0e0e",
+                "on-secondary-fixed-variant": "#5c5b5b",
+                "primary-container": "#454747",
+                "on-error": "#490106",
+                "inverse-on-surface": "#565555",
+                "outline": "#767575",
+                "surface-bright": "#2b2c2c",
+                "on-primary-container": "#d0d0d0",
+                "surface-container-lowest": "#000000",
+                "secondary-container": "#3b3b3b",
+                "on-secondary": "#202020",
+                "on-primary-fixed-variant": "#5a5c5c",
+                "tertiary-container": "#9fcefe",
+                "on-secondary-fixed": "#3f3f3f",
+                "on-primary-fixed": "#3e4040",
+                "on-error-container": "#ff9993",
+                "primary-fixed": "#e2e2e2",
+                "secondary": "#9f9d9d"
+              },
+              fontFamily: {
+                "headline": ["Manrope"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .text-shadow-sm {
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        body {
+            background-color: #0e0e0e;
+        }
+    </style>
+</head>
+<body class="font-body text-on-surface selection:bg-tertiary selection:text-on-tertiary-container">
+<!-- TopAppBar Shell -->
+<header class="w-full top-0 px-6 pt-8 pb-4 bg-transparent no-border space-y-4 flex justify-between items-center w-full max-w-screen-xl mx-auto z-40">
+<div class="flex items-center gap-3">
+<span class="text-xl font-extrabold text-slate-100 tracking-tighter font-headline">Atmospheric</span>
+</div>
+<div class="hidden md:flex flex-1 max-w-md mx-8">
+<div class="w-full relative">
+<input class="w-full bg-surface-container-highest border-none rounded-full py-2.5 px-6 text-on-surface placeholder:text-on-surface-variant focus:ring-1 focus:ring-tertiary/30" placeholder="Search city..." type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-800/40 transition-colors scale-95 active:duration-150 text-slate-200">
+<span class="material-symbols-outlined">calendar_today</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-800/40 transition-colors scale-95 active:duration-150 text-slate-200">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<main class="max-w-screen-xl mx-auto px-6 pt-4 pb-32">
+<!-- Hero Section: Current Weather -->
+<section class="mb-16">
+<div class="relative overflow-hidden rounded-3xl bg-surface-container-low p-8 md:p-12 lg:p-16 flex flex-col md:flex-row justify-between items-start md:items-center min-h-[400px]">
+<!-- Subtle Gradient Texture -->
+<div class="absolute inset-0 bg-gradient-to-br from-tertiary/5 via-transparent to-on-tertiary-container/10 pointer-events-none"></div>
+<div class="relative z-10 space-y-2">
+<div class="flex items-center gap-2 text-tertiary mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="text-label-md font-medium tracking-wide font-body">LONDON, UK</span>
+</div>
+<h1 class="text-8xl md:text-9xl font-extrabold font-headline tracking-tighter text-on-surface flex items-start">
+                        22<span class="text-5xl md:text-6xl font-light mt-4 text-tertiary-dim">°C</span>
+</h1>
+<p class="text-xl md:text-2xl font-body text-on-surface-variant font-light">Partly Cloudy</p>
+<div class="pt-4 flex gap-4">
+<span class="px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold tracking-widest uppercase">High 24°</span>
+<span class="px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold tracking-widest uppercase">Low 16°</span>
+</div>
+</div>
+<div class="relative z-10 mt-12 md:mt-0 flex flex-col items-center md:items-end">
+<!-- Hero Icon Asymmetry -->
+<div class="relative">
+<span class="material-symbols-outlined text-[160px] md:text-[220px] leading-none text-tertiary drop-shadow-2xl" style="font-variation-settings: 'FILL' 1;">cloud_queue</span>
+<span class="material-symbols-outlined absolute -top-4 -right-4 text-7xl text-tertiary-fixed-dim/40" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+</div>
+<p class="text-label-md font-body text-on-surface-variant/60 mt-4 tracking-widest uppercase">Updated 4 mins ago</p>
+</div>
+</div>
+</section>
+<!-- Bento Grid: Weather Metrics & Forecast -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Panel: 5-Day Forecast -->
+<section class="lg:col-span-2 space-y-6">
+<div class="flex justify-between items-end mb-4">
+<h2 class="text-2xl font-headline font-bold text-on-surface">5-Day Forecast</h2>
+<button class="text-tertiary text-sm font-medium hover:underline transition-all">Detailed Outlook</button>
+</div>
+<div class="bg-surface-container-high rounded-3xl overflow-hidden p-2">
+<!-- Zebra Pattern Table -->
+<div class="space-y-1">
+<!-- Monday -->
+<div class="flex items-center justify-between p-6 rounded-2xl bg-surface-container-low">
+<span class="w-24 text-on-surface font-medium">Monday</span>
+<div class="flex items-center gap-4 flex-1 justify-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+<div class="w-32 h-1.5 bg-surface-container-highest rounded-full relative">
+<div class="absolute left-1/4 right-1/4 h-full bg-gradient-to-r from-tertiary-dim to-tertiary rounded-full shadow-[0_0_8px_rgba(185,219,255,0.4)]"></div>
+</div>
+</div>
+<div class="w-24 text-right">
+<span class="text-on-surface font-bold">24°</span>
+<span class="text-on-surface-variant text-sm ml-2">16°</span>
+</div>
+</div>
+<!-- Tuesday -->
+<div class="flex items-center justify-between p-6 rounded-2xl bg-surface-container">
+<span class="w-24 text-on-surface font-medium">Tuesday</span>
+<div class="flex items-center gap-4 flex-1 justify-center">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant">partly_cloudy_day</span>
+<div class="w-32 h-1.5 bg-surface-container-highest rounded-full relative">
+<div class="absolute left-1/3 right-1/5 h-full bg-gradient-to-r from-tertiary-dim to-tertiary rounded-full shadow-[0_0_8px_rgba(185,219,255,0.4)]"></div>
+</div>
+</div>
+<div class="w-24 text-right">
+<span class="text-on-surface font-bold">22°</span>
+<span class="text-on-surface-variant text-sm ml-2">14°</span>
+</div>
+</div>
+<!-- Wednesday -->
+<div class="flex items-center justify-between p-6 rounded-2xl bg-surface-container-low">
+<span class="w-24 text-on-surface font-medium">Wednesday</span>
+<div class="flex items-center gap-4 flex-1 justify-center">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant">rainy</span>
+<div class="w-32 h-1.5 bg-surface-container-highest rounded-full relative">
+<div class="absolute left-1/2 right-1/4 h-full bg-gradient-to-r from-tertiary-dim to-tertiary rounded-full shadow-[0_0_8px_rgba(185,219,255,0.4)]"></div>
+</div>
+</div>
+<div class="w-24 text-right">
+<span class="text-on-surface font-bold">19°</span>
+<span class="text-on-surface-variant text-sm ml-2">12°</span>
+</div>
+</div>
+<!-- Thursday -->
+<div class="flex items-center justify-between p-6 rounded-2xl bg-surface-container">
+<span class="w-24 text-on-surface font-medium">Thursday</span>
+<div class="flex items-center gap-4 flex-1 justify-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+<div class="w-32 h-1.5 bg-surface-container-highest rounded-full relative">
+<div class="absolute left-1/4 right-1/4 h-full bg-gradient-to-r from-tertiary-dim to-tertiary rounded-full shadow-[0_0_8px_rgba(185,219,255,0.4)]"></div>
+</div>
+</div>
+<div class="w-24 text-right">
+<span class="text-on-surface font-bold">25°</span>
+<span class="text-on-surface-variant text-sm ml-2">17°</span>
+</div>
+</div>
+<!-- Friday -->
+<div class="flex items-center justify-between p-6 rounded-2xl bg-surface-container-low">
+<span class="w-24 text-on-surface font-medium">Friday</span>
+<div class="flex items-center gap-4 flex-1 justify-center">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant">cloud_queue</span>
+<div class="w-32 h-1.5 bg-surface-container-highest rounded-full relative">
+<div class="absolute left-1/3 right-1/3 h-full bg-gradient-to-r from-tertiary-dim to-tertiary rounded-full shadow-[0_0_8px_rgba(185,219,255,0.4)]"></div>
+</div>
+</div>
+<div class="w-24 text-right">
+<span class="text-on-surface font-bold">21°</span>
+<span class="text-on-surface-variant text-sm ml-2">15°</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Panel: Weather Details Grid -->
+<section class="space-y-6">
+<h2 class="text-2xl font-headline font-bold text-on-surface">Details</h2>
+<div class="grid grid-cols-2 gap-4">
+<!-- Humidity Card -->
+<div class="bg-surface-container-high rounded-3xl p-6 flex flex-col justify-between aspect-square">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-tertiary-dim">humidity_percentage</span>
+<span class="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase">Normal</span>
+</div>
+<div>
+<p class="text-3xl font-headline font-extrabold text-on-surface">65%</p>
+<p class="text-xs text-on-surface-variant font-body">Humidity</p>
+</div>
+</div>
+<!-- Wind Card -->
+<div class="bg-surface-container-high rounded-3xl p-6 flex flex-col justify-between aspect-square">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-tertiary-dim">air</span>
+<span class="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase">E-SE</span>
+</div>
+<div>
+<p class="text-3xl font-headline font-extrabold text-on-surface">12 <span class="text-sm font-normal text-on-surface-variant">km/h</span></p>
+<p class="text-xs text-on-surface-variant font-body">Wind Speed</p>
+</div>
+</div>
+<!-- UV Index Card -->
+<div class="bg-surface-container-high rounded-3xl p-6 flex flex-col justify-between aspect-square">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-tertiary-dim">wb_sunny</span>
+<span class="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase">Moderate</span>
+</div>
+<div>
+<p class="text-3xl font-headline font-extrabold text-on-surface">3</p>
+<p class="text-xs text-on-surface-variant font-body">UV Index</p>
+</div>
+</div>
+<!-- Visibility Card -->
+<div class="bg-surface-container-high rounded-3xl p-6 flex flex-col justify-between aspect-square">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-tertiary-dim">visibility</span>
+<span class="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase">Clear</span>
+</div>
+<div>
+<p class="text-3xl font-headline font-extrabold text-on-surface">10 <span class="text-sm font-normal text-on-surface-variant">km</span></p>
+<p class="text-xs text-on-surface-variant font-body">Visibility</p>
+</div>
+</div>
+</div>
+<!-- Radar Map Teaser -->
+<div class="bg-surface-container-high rounded-3xl p-4 overflow-hidden relative h-40">
+<img class="absolute inset-0 w-full h-full object-cover opacity-50 grayscale contrast-125" data-alt="Abstract dark topographic map of London area" data-location="London" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEPSVZJMsdz6_ovyU5tNKdUsBq9yfowQySeK6hy5rOPN7w5-ruHraoZyswwVkB4v8b0XrM6t62r67ggQJbrzgddJLb1ntnOD3wVS8hLqzyfCcg3QSn98SVW6YAy5A7XhNXGFvlgc7oBUYgOnxdC1MnhSZXyHpEFeJAimrZrze8pw1N5QSCiNELKVXTGgvalwVhcGE3yjIbPYFuG4ow1NDy3FjkOUxpt2fPLIlFiIWFHL2puewdGg04ndTlBfggGhIJeTos4KX-EOo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-high to-transparent"></div>
+<div class="relative z-10 flex flex-col justify-end h-full p-2">
+<button class="flex items-center justify-center gap-2 bg-tertiary text-on-tertiary-container py-2 rounded-2xl text-sm font-bold shadow-lg">
+<span class="material-symbols-outlined text-sm">map</span>
+                            Open Live Radar
+                        </button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar Shell -->
+</body></html>
