@@ -103,7 +103,7 @@
             </div>
             <div>
                 <label class="block text-sm text-on-surface-variant mb-1">Model Name</label>
-                <input id="settings-model" type="text" class="w-full bg-surface-container-low border border-outline rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="qwen3:4b">
+                <input id="settings-model" type="text" class="w-full bg-surface-container-low border border-outline rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="hf.co/DavidAU/L3-Jamet-8B-MK.V-Blackroot-12.2B-V1-INSTRUCT-ULTRA-F32-GGUF:Q4_K_M">
             </div>
         </div>
 
@@ -134,7 +134,7 @@
 <h3 class="font-headline text-4xl md:text-5xl font-medium tracking-tight text-on-surface mb-4">
                     Tack Chat</h3>
 <p class="text-on-surface-variant text-base max-w-md mx-auto">
-                    A Locally Hosted AI Chat Using Qwen3 4B Secured Using Cloudflare</p>
+                    A Locally Hosted AI Chat Using Jamet-8B-MK.V-Blackroot-12.2B-V1 Secured Using Cloudflare</p>
 </div>
 <!-- Chat Messages -->
 <div id="chat-messages" class="flex flex-col gap-6 w-full"></div>
@@ -196,7 +196,7 @@
         // 3. Determine final endpoint
         let endpoint = savedEndpoint || defaultEndpoint;
         
-        let modelStr = localStorage.getItem('ollama_model') || 'qwen3:4b';
+        let modelStr = localStorage.getItem('ollama_model_name') || 'hf.co/DavidAU/L3-Jamet-8B-MK.V-Blackroot-12.2B-V1-INSTRUCT-ULTRA-F32-GGUF:Q4_K_M';
         let chatHistory = [];
         let isGenerating = false;
         
@@ -223,10 +223,10 @@
             let userEndpoint = settingsUrl.value.trim();
             if (userEndpoint.endsWith('/')) userEndpoint = userEndpoint.slice(0, -1);
             endpoint = userEndpoint || 'https://validity-interval-zum-left.trycloudflare.com';
-            modelStr = settingsModel.value.trim() || 'qwen3:4b';
+            modelStr = settingsModel.value.trim() || 'hf.co/DavidAU/L3-Jamet-8B-MK.V-Blackroot-12.2B-V1-INSTRUCT-ULTRA-F32-GGUF:Q4_K_M';
             
             localStorage.setItem('ollama_endpoint', endpoint);
-            localStorage.setItem('ollama_model', modelStr);
+            localStorage.setItem('ollama_model_name', modelStr);
             closeSettings();
         }
         
