@@ -42,13 +42,18 @@ if ($Url) {
     
     # 3. Open Tack Chat in the browser with the URL parameter
     $CodeHtmlPath = "..\Tack Chat\code.html"
+    $TunnelJsPath = "..\Tack Chat\tunnel.js"
     $AbsolutePath = (Resolve-Path $CodeHtmlPath).Path
     
-    # We add the ?tunnel= parameter so code.html saves it automatically
-    $BrowserUrl = "file:///$AbsolutePath`?tunnel=$Url"
+    # Write the URL to a local JS file to reliably pass it without query string issues
+    Set-Content -Path $TunnelJsPath -Value "window.DYNAMIC_TUNNEL = '$Url';"
     
-    Write-Host "Opening Tack Chat in your default browser..."
-    Start-Process $BrowserUrl
+    # We url-encode the absolute path to handle spaces safely
+    $EncodedPath = $AbsolutePath -replace "\\", "/" -replace " ", "%20"
+    $BrowserUrl = "file:///$EncodedPath"
+    
+    Write-Host "Opening Tack Chat in Google Chrome..."
+    Start-Process chrome.exe -ArgumentList "`"$BrowserUrl`""
 } else {
     Write-Host "Error: Could not find the trycloudflare URL in time. Check $LogFile for details." -ForegroundColor Red
 }

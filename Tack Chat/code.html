@@ -162,6 +162,7 @@
 </div>
 </main>
 
+<script src="tunnel.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const chatInput = document.getElementById('chat-input');
@@ -193,8 +194,13 @@
         // 2. Load what is currently saved
         let savedEndpoint = localStorage.getItem('ollama_endpoint');
         
-        // 3. Determine final endpoint
-        let endpoint = savedEndpoint || defaultEndpoint;
+        // 3. Determine final endpoint (Prioritize tunnel.js, then query string/saved, then default)
+        let endpoint = window.DYNAMIC_TUNNEL || savedEndpoint || defaultEndpoint;
+        
+        // Save back the dynamic tunnel so settings dialog reflects it
+        if (window.DYNAMIC_TUNNEL) {
+            localStorage.setItem('ollama_endpoint', window.DYNAMIC_TUNNEL);
+        }
         
         let modelStr = localStorage.getItem('ollama_model_name') || 'hf.co/DavidAU/L3-Jamet-8B-MK.V-Blackroot-12.2B-V1-INSTRUCT-ULTRA-F32-GGUF:Q4_K_M';
         let chatHistory = [];
