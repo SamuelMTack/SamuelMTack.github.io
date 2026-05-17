@@ -134,3 +134,48 @@ a:focus,.button:focus,button:focus{outline:3px solid rgba(14,165,161,0.15);outli
     }
     #touch-controls .touch-btn.active{ background: color-mix(in srgb, var(--accent) 85%, black 15%); }
 }
+
+/* Lightbox styles */
+.lightbox-overlay {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.lightbox-overlay img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 8px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    object-fit: contain;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+    user-select: none;
+}
+
+.lightbox-close:hover {
+    color: var(--accent);
+}
+
+#photo-album .photos img:hover {
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}

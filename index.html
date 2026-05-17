@@ -181,6 +181,32 @@
                         </figure>
                     </div>
                 </div>
+                <ul class="actions" style="display: flex; justify-content: center; margin-top: 1rem; list-style: none; padding: 0;">
+                    <li><a href="#photo-album" class="button primary" style="display: inline-flex; align-items: center; justify-content: center; font-size: 1.3em; padding: 0 2em; height: 3.5rem; letter-spacing: 1px;">Photo Album</a></li>
+                </ul>
+            </article>
+
+            <!-- Article: Photo Album -->
+            <article id="photo-album">
+                <h2 class="major">Photo Album</h2>
+                <div class="media-grid">
+                    <div class="photos" style="justify-content: center;">
+                        <figure><img src="assets/Photo%20Album/Airforce%20Grad.jpg" alt="Airforce Grad" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Austriala%20Beach.jpg" alt="Austriala Beach" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Austrialia%20Red%20Cliff.jpg" alt="Austrialia Red Cliff" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Austrlia%20Ocean.jpg" alt="Austrlia Ocean" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Bubbuh%20Dawg.JPG" alt="Bubbuh Dawg" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Flower%20Plant%202.JPG" alt="Flower Plant 2" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Flower%20Plant.JPG" alt="Flower Plant" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Gram%20and%20Dave.jpg" alt="Gram and Dave" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Kanagaroo.jpg" alt="Kanagaroo" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Ozzy%20Dawg.jpg" alt="Ozzy Dawg" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Resize%201.jpg" alt="Resize 1" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Resize%202.jpg" alt="Resize 2" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Sam%20Bench.jpg" alt="Sam Bench" loading="lazy" /></figure>
+                        <figure><img src="assets/Photo%20Album/Sam%20River%20Bank.jpg" alt="Sam River Bank" loading="lazy" /></figure>
+                    </div>
+                </div>
             </article>
 
             <!-- Article: Career -->
@@ -572,8 +598,39 @@
     <script src="Dimension/DimensionAssets/js/util.js"></script>
     <script src="Dimension/DimensionAssets/js/main.js"></script>
 
-
-    <!-- Dimension main.js will handle hash navigation and article panel behavior -->
+    <!-- Lightbox for Photo Album -->
+    <div id="lightbox" class="lightbox-overlay">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="Full Screen Photo">
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxClose = document.querySelector('.lightbox-close');
+            
+            // Add click event to all images in the photo album
+            document.querySelectorAll('#photo-album .photos img').forEach(img => {
+                img.style.cursor = 'zoom-in';
+                img.addEventListener('click', function() {
+                    lightbox.style.display = 'flex';
+                    lightboxImg.src = this.src;
+                });
+            });
+            
+            // Close lightbox when clicking the close button
+            lightboxClose.addEventListener('click', function() {
+                lightbox.style.display = 'none';
+            });
+            
+            // Close lightbox when clicking outside the image
+            lightbox.addEventListener('click', function(e) {
+                if(e.target !== lightboxImg) {
+                    lightbox.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
